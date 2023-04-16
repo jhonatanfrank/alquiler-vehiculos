@@ -1,0 +1,33 @@
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  margin: 20px;
+}
+
+section {
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+
+footer {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 10px;
+  text-align: center;
+}
+
+.parrafo-error {
+  color: #333;
+}
+
+.imagen-error{
+  width: 100%;
+  min-width: 45%;
+  max-width: 700px;
+}

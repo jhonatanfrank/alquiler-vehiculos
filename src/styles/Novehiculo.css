@@ -1,0 +1,35 @@
+header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+main {
+  margin: 20px;
+}
+
+section {
+  border: 1px solid #ddd;
+  padding: 20px;
+  text-align: center;
+}
+
+footer {
+  background-color: #f8f9fa;
+  color: #333;
+  padding: 10px;
+  text-align: center;
+}
+
+.parrafo-error {
+  color: #333;
+}
+
+.Novehiculos-h1 {
+  color: #333;
+}
+
+.Novehiculos-section {
+  border: 0px solid #ddd;
+}
