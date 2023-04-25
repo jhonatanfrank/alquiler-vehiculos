@@ -37,7 +37,7 @@ function App() {
         console.error("Error al obtener los vehículos: ", error);
         //setCargando(false); // indicar que se ha terminado de cargar, aunque con error
       });
-  }, [vehiculos]);
+  }, []);
 
   const handleChangeMarca = (e) => {
     setBusquedaMarca(e.target.value);

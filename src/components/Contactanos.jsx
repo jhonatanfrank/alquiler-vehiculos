@@ -1,27 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Contactanos.css";
+
 const Contactanos = () => {
-  // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
-  (() => {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll(".needs-validation");
+  const [sent, setSent] = useState(false);
 
-    // Loop over them and prevent submission
-    Array.from(forms).forEach((form) => {
-      form.addEventListener(
-        "submit",
-        (event) => {
-          if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
+  async function handleSubmit(event) {
+    event.preventDefault();
 
-          form.classList.add("was-validated");
+    const formData = new FormData(event.target);
+    const data = {};
+    formData.forEach((value, key) => (data[key] = value));
+
+    const response = await fetch(
+      "http://localhost:8080/alquilervehiculos/api/contactanos",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-        false
-      );
-    });
-  })();
+        body: JSON.stringify(data),
+      }
+    );
+
+    const result = await response.json();
+    console.log(result);
+
+    setSent(true);
+    event.target.reset();
+  }
 
   return (
     <>
@@ -81,14 +87,16 @@ const Contactanos = () => {
       </div>
       <div className="container mt-5">
         <h4>Contáctanos</h4>
-        <p>
-          Si desea solicitar información, complete y envíe el formulario a
-          continuación.
-        </p>
-        <form className="needs-validation row g-3" noValidate>
+        <form className="needs-validation row g-3" onSubmit={handleSubmit}>
           <div className="col-md-6">
             <label className="form-label">Nombres</label>
-            <input type="text" className="form-control" placeholder="Nombres" required/>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Nombres"
+              name="nombres"
+              required
+            />
           </div>
           <div className="col-md-6">
             <label className="form-label">Apellidos</label>
@@ -96,6 +104,7 @@ const Contactanos = () => {
               type="text"
               className="form-control"
               placeholder="Apellidos"
+              name="apellidos"
               required
             />
           </div>
@@ -105,7 +114,7 @@ const Contactanos = () => {
               type="email"
               className="form-control"
               placeholder="example@gmail.com"
-              required
+              name="email"
             />
           </div>
           <div className="col-md-4">
@@ -114,12 +123,18 @@ const Contactanos = () => {
               type="text"
               className="form-control"
               placeholder="+51 976 407 806"
+              name="celular"
               required
             />
           </div>
           <div className="col-md-12">
             <label className="form-label">Añade algo mas a tu solicitud:</label>
-            <textarea className="form-control" rows="6" required></textarea>
+            <textarea
+              name="comentarios"
+              className="form-control"
+              rows="6"
+              required
+            ></textarea>
           </div>
           <div className="col-md-12">
             <button type="submit" className="btn btn-dark btn-sm p-2">
@@ -127,6 +142,9 @@ const Contactanos = () => {
             </button>
           </div>
         </form>
+        {sent ? (
+          <div className="mensaje-enviado">¡Fomulario enviado con éxito!</div>
+        ) : null}
       </div>
       <br />
       <div className="container">
@@ -137,7 +155,8 @@ const Contactanos = () => {
             width="100%"
             height="500"
             loading="lazy"
-          ></iframe>
+            title="Mapa de ubicación de nuestro local"
+          />
         </div>
       </div>
       <br />

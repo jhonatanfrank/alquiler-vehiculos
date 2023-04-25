@@ -5,7 +5,6 @@ import Fecha from "../components/Fecha";
 import Consejos from "./Consejos";
 
 const Vehiculo = () => {
-  
   // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
   (() => {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -56,7 +55,7 @@ const Vehiculo = () => {
       {vehiculo ? (
         <>
           <div className="container-fluid p-5 bg-dark text-white text-center">
-            <h1>Reserva el vehículo "{vehiculo.placa}" aquí!!!</h1>
+            <h1>!Resérvalo aquí!</h1>
             <p>
               Puedes reservar el vehículo o alquilar aquí, siguiendo los pasos
             </p>
@@ -74,9 +73,7 @@ const Vehiculo = () => {
             <div className="columna-2">
               <div className="">
                 <div className="contenedor-detalle">
-                  <h3>
-                    Detalles
-                  </h3>
+                  <h3>Detalles</h3>
                   <ul>
                     <li className="li-detalle">
                       <strong>Placa: </strong>
@@ -230,10 +227,8 @@ const Vehiculo = () => {
                     <label className="form-check-label" id="mi-checkbox">
                       Acepto los terminos y condiciones
                     </label>
- 
                   </div>
-
-                  <button className="btn btn-dark">Enviar</button>
+                  <button className="btn btn-dark">Siguiente</button>
                 </form>
               </div>
             </div>
