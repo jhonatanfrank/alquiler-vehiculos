@@ -12,6 +12,7 @@ import Vehiculo from "./components/Vehiculo";
 import Login from "./components/Login";
 import Footer from "./components/Footer";
 import Registro from "./components/Registro";
+import Whatsappflotante from "./components/Whatsappflotante";
 
 //localhost:8080/alquilervehiculos/api/vehiculos
 
@@ -52,6 +53,7 @@ function App() {
         <div className="App">
           <BrowserRouter>
             <Navbar />
+            <Whatsappflotante />
             <Routes>
               <Route path="/" element={<Inicio />} />
               <Route

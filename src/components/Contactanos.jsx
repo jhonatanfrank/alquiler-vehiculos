@@ -1,6 +1,28 @@
 import React from "react";
 import "../styles/Contactanos.css";
 const Contactanos = () => {
+  // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
+  (() => {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".needs-validation");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+
   return (
     <>
       <div className="container-fluid p-5 bg-dark text-white text-center">
@@ -17,7 +39,7 @@ const Contactanos = () => {
             <strong className="d-flex align-items-center justify-content-center">
               Direccion
             </strong>
-            <span className="d-flex align-items-center justify-content-center">              
+            <span className="d-flex align-items-center justify-content-center">
               Jr. San Luis 328
             </span>
           </div>
@@ -26,22 +48,34 @@ const Contactanos = () => {
               <img src="./images/telephone.svg" alt="" width="55" height="57" />
             </div>
             <br />
-            <strong className="d-flex align-items-center justify-content-center">Teléfonos</strong>
-            <span className="d-flex align-items-center justify-content-center">987657876</span>
+            <strong className="d-flex align-items-center justify-content-center">
+              Teléfonos
+            </strong>
+            <span className="d-flex align-items-center justify-content-center">
+              987657876
+            </span>
           </div>
           <div className="contenedor-cards-contactanos col-lg-3 col-md-6 col-sm-6">
             <div className="d-flex align-items-center justify-content-center">
               <img src="./images/envelope.svg" alt="" width="50" height="55" />
             </div>
-            <strong className="d-flex align-items-center justify-content-center">Correo</strong>
-            <span className="d-flex align-items-center justify-content-center">carsforall@gmail.com</span>
+            <strong className="d-flex align-items-center justify-content-center">
+              Correo
+            </strong>
+            <span className="d-flex align-items-center justify-content-center">
+              carsforall@gmail.com
+            </span>
           </div>
           <div className="contenedor-cards-contactanos col-lg-3 col-md-6 col-sm-6">
             <div className="d-flex align-items-center justify-content-center">
               <img src="./images/envelope.svg" alt="" width="60" height="55" />
             </div>
-            <strong className="d-flex align-items-center justify-content-center">whatsapp</strong>
-            <span className="d-flex align-items-center justify-content-center">+51 969872817</span>
+            <strong className="d-flex align-items-center justify-content-center">
+              whatsapp
+            </strong>
+            <span className="d-flex align-items-center justify-content-center">
+              +51 969872817
+            </span>
           </div>
         </div>
       </div>
@@ -51,14 +85,19 @@ const Contactanos = () => {
           Si desea solicitar información, complete y envíe el formulario a
           continuación.
         </p>
-        <form className="row g-3">
+        <form className="needs-validation row g-3" noValidate>
           <div className="col-md-6">
             <label className="form-label">Nombres</label>
-            <input type="text" className="form-control" placeholder="Nombres" />
+            <input type="text" className="form-control" placeholder="Nombres" required/>
           </div>
           <div className="col-md-6">
             <label className="form-label">Apellidos</label>
-            <input type="text" className="form-control" placeholder="Apellidos" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Apellidos"
+              required
+            />
           </div>
           <div className="col-md-8">
             <label className="form-label">Correo electronico</label>
@@ -66,6 +105,7 @@ const Contactanos = () => {
               type="email"
               className="form-control"
               placeholder="example@gmail.com"
+              required
             />
           </div>
           <div className="col-md-4">
@@ -74,11 +114,12 @@ const Contactanos = () => {
               type="text"
               className="form-control"
               placeholder="+51 976 407 806"
+              required
             />
           </div>
           <div className="col-md-12">
             <label className="form-label">Añade algo mas a tu solicitud:</label>
-            <textarea className="form-control" rows="6"></textarea>
+            <textarea className="form-control" rows="6" required></textarea>
           </div>
           <div className="col-md-12">
             <button type="submit" className="btn btn-dark btn-sm p-2">

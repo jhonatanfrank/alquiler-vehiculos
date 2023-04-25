@@ -5,6 +5,7 @@ import Fecha from "../components/Fecha";
 import Consejos from "./Consejos";
 
 const Vehiculo = () => {
+  
   // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
   (() => {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -26,6 +27,7 @@ const Vehiculo = () => {
       );
     });
   })();
+
   const params = useParams();
 
   const [vehiculo, setVehiculo] = useState(null);
