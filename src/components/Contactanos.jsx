@@ -87,6 +87,10 @@ const Contactanos = () => {
       </div>
       <div className="container mt-5">
         <h4>Contáctanos</h4>
+        <p>
+          Si desea solicitar información, complete y envíe el formulario a
+          continuación.
+        </p>
         <form className="needs-validation row g-3" onSubmit={handleSubmit}>
           <div className="col-md-6">
             <label className="form-label">Nombres</label>

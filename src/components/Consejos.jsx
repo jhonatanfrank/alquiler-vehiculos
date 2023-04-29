@@ -4,7 +4,7 @@ const Adicional = () => {
   return (
     <>
       <div className="mt-5 contenedor-hijo-adicional">
-        <div className="contenedor-adicional-adicion">
+        <div className="contenedor-adicional-adicion contenedor-box-shadow">
           <h3>Respeta las señalizaciones</h3>
           <br />
           <p>
@@ -17,7 +17,7 @@ const Adicional = () => {
           </p>
           <br />
         </div>
-        <div className="contenedor-adicional-adicion">
+        <div className="contenedor-adicional-adicion contenedor-box-shadow">
           <h3>Usa el cinturón de seguridad</h3>
           <br />
           <p>
@@ -30,7 +30,7 @@ const Adicional = () => {
           </p>
           <br />
         </div>
-        <div className="contenedor-adicional-adicion">
+        <div className="contenedor-adicional-adicion contenedor-box-shadow">
           <h3>Utiliza las luces</h3>
           <br />
           <p>

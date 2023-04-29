@@ -1,14 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../styles/Vehiculos.css";
 
 const Vehiculos = (props) => {
   return (
     <>
       <div>
-        <div className="contenedor-hijo-vehiculos">
+        <div className="contenedor-hijo-vehiculos contenedor-box-shadow">
           <div className="precio">
             <span className="precio-titulo">
-              <strong>Desde: S/{props.precio}.00</strong>          
+              <strong>Desde: S/{props.precio}.00</strong>
             </span>
             <span className="sub-precio-titulo">/día</span>
           </div>

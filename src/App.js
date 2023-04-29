@@ -9,10 +9,11 @@ import Inicio from "./components/Inicio";
 import Contactanos from "./components/Contactanos";
 import Error from "./components/Error";
 import Vehiculo from "./components/Vehiculo";
-import Login from "./components/Login";
 import Footer from "./components/Footer";
-import Registro from "./components/Registro";
 import Whatsappflotante from "./components/Whatsappflotante";
+import Terminoscondiciones from "./components/Terminoscondiciones";
+import Resumenalquiler from "./components/Resumenalquiler";
+import Pasarelapago from "./components/Pasarelapago";
 
 //localhost:8080/alquilervehiculos/api/vehiculos
 
@@ -119,8 +120,9 @@ function App() {
               />
               <Route path="/contactanos" element={<Contactanos />} />
               <Route path="/vehiculos/:id" element={<Vehiculo />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/registro" element={<Registro />} />
+              <Route path="/vehiculos/:id/terminos-y-condiciones" element={<Terminoscondiciones />} />
+              <Route path="/resumenalquiler" element={<Resumenalquiler />} />
+              <Route path="/pasarela-de-pago" element={<Pasarelapago />} />
               <Route path="*" element={<Error />} />
             </Routes>
             <>

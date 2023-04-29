@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "./Spinner";
 import Fecha from "../components/Fecha";
 import Consejos from "./Consejos";
+import "../styles/Vehiculo.css";
 
 const Vehiculo = () => {
+  const [isChecked, setIsChecked] = useState(false);
+
   // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
   (() => {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -49,6 +52,12 @@ const Vehiculo = () => {
 
     obtenerVehiculo();
   }, [params.id]);
+
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate("/resumenalquiler");
+  }
 
   return (
     <>
@@ -118,7 +127,7 @@ const Vehiculo = () => {
             <Consejos />
           </div>
 
-          <div className="contenedor-formulario mx-auto">
+          <div className="contenedor-formulario contenedor-box-shadow mx-auto">
             <div className="contenedor-hijo-adicional">
               <div className="container">
                 <h4>Complete los datos:</h4>
@@ -217,18 +226,27 @@ const Vehiculo = () => {
                       <Fecha />
                     </div>
                   </div>
+
                   <div className="form-check">
                     <input
                       className="form-check-input"
                       type="checkbox"
-                      value=""
-                      id="defaultCheck1"
+                      checked={isChecked}
+                      onChange={() => setIsChecked(!isChecked)}
                     />
                     <label className="form-check-label" id="mi-checkbox">
                       Acepto los terminos y condiciones
                     </label>
                   </div>
-                  <button className="btn btn-dark">Siguiente</button>
+                  <div className="container-button">
+                    <button
+                      className="btn btn-dark btn-sm p-2"
+                      onClick={handleClick}
+                      disabled={!isChecked}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>

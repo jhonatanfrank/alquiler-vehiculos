@@ -1,0 +1,25 @@
+.contenedor-hijo-vehiculos {
+  width: 310px;
+  height: auto;
+  padding: 30px;
+}
+
+.precio-titulo {
+  font-size: 20px;
+}
+
+.sub-precio-titulo {
+  font-size: 13px;
+}
+
+.precio {
+  text-align: right;
+}
+
+.imagen-caja {
+  /*background-color: hsl(223deg 14% 20%);*/
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,9 +1,10 @@
 import React from 'react'
+import "../styles/Footer.css";
 
 const Footer = () => {
     return (
         <div>
-            <div className="footer container-fluid p-5 bg-dark text-white text-white text-center">
+            <div className="container-fluid p-5 bg-dark text-center">
                 <div className="row">
                     <div className="col-sm-4">
                         <h3 className='texto-footer'>Rent Car´s</h3>
