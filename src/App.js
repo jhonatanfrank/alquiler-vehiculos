@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Novehiculos from "./components/Novehiculos";
 import Navbar from "./components/Navbar";
@@ -16,6 +16,8 @@ import Resumenalquiler from "./components/Resumenalquiler";
 import Pasarelapago from "./components/Pasarelapago";
 
 //localhost:8080/alquilervehiculos/api/vehiculos
+
+export const userContext = React.createContext();
 
 function App() {
   const [vehiculos, setVehiculos] = useState([]);
@@ -121,7 +123,6 @@ function App() {
               <Route path="/contactanos" element={<Contactanos />} />
               <Route path="/vehiculos/:id" element={<Vehiculo />} />
               <Route path="/vehiculos/:id/terminos-y-condiciones" element={<Terminoscondiciones />} />
-              <Route path="/resumenalquiler" element={<Resumenalquiler />} />
               <Route path="/pasarela-de-pago" element={<Pasarelapago />} />
               <Route path="*" element={<Error />} />
             </Routes>

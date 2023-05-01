@@ -60,8 +60,6 @@ p {
   margin: 0;
 }
 
-
-
 .spinner-border.custom-size {
   width: 10rem;
   height: 10rem;
@@ -219,5 +217,9 @@ input.form-control:focus {
 }
 
 .vehiculo-p {
+  color: black;
+}
+
+.texto-modal {
   color: black;
 }

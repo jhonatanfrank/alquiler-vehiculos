@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Spinner from "./Spinner";
-import Fecha from "../components/Fecha";
 import Consejos from "./Consejos";
 import "../styles/Vehiculo.css";
+import { Modal, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import moment from "moment";
 
-const Vehiculo = () => {
+const Vehiculo = (props) => {
+  const [showModal, setShowModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  // Example starter JavaScript htmlFor disabling form submissions if there are invalid fields
-  (() => {
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    const forms = document.querySelectorAll(".needs-validation");
+  const [datos, setDatos] = useState({});
+  const [showModal2, setShowModal2] = useState(false);
 
-    // Loop over them and prevent submission
-    Array.from(forms).forEach((form) => {
-      form.addEventListener(
-        "submit",
-        (event) => {
-          if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
+  const [fecha, setFecha] = useState("");
 
-          form.classList.add("was-validated");
-        },
-        false
-      );
-    });
-  })();
+  const handleInputChange = (event) => {
+    setDatos({ ...datos, [event.target.name]: event.target.value });
+    setFecha(event.target.value);
+    console.log(fecha)
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setShowModal2(true);
+  };
+
+  /**Terminos y condiciones */
+  const handleLabelClick = () => {
+    setShowModal(true);
+  };
 
   const params = useParams();
 
@@ -52,12 +54,6 @@ const Vehiculo = () => {
 
     obtenerVehiculo();
   }, [params.id]);
-
-  const navigate = useNavigate();
-
-  function handleClick() {
-    navigate("/resumenalquiler");
-  }
 
   return (
     <>
@@ -123,57 +119,57 @@ const Vehiculo = () => {
             </div>
           </div>
 
-          <div className="contenedor-padre-adicional">
-            <Consejos />
-          </div>
+          <Consejos />
 
           <div className="contenedor-formulario contenedor-box-shadow mx-auto">
             <div className="contenedor-hijo-adicional">
               <div className="container">
                 <h4>Complete los datos:</h4>
-                <form className="needs-validation" noValidate>
+                <form onSubmit={handleSubmit}>
                   <div className="row">
                     <div className="col-md-4">
                       <div className="form-group">
                         <label htmlFor="name">Nombre:</label>
                         <input
                           type="text"
+                          name="nombre"
                           className="form-control"
-                          id="name"
-                          name="name"
                           placeholder="Nombres completos"
-                          required
+                          value={datos.nombre || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="email">Email:</label>
-                        <input
-                          type="email"
-                          className="form-control"
-                          id="email"
-                          name="email"
-                          placeholder="ejemplo@hotmail.com"
-                          required
-                        />
-                        <label htmlFor="name">Dirección:</label>
+                        <label htmlFor="name">Email:</label>
                         <input
                           type="text"
+                          name="email"
                           className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Av. Cesar Ramirez, Lote 151"
-                          required
+                          placeholder="Correo Electronico"
+                          value={datos.email || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="phone">Teléfono:</label>
+                        <label htmlFor="name">Direccion:</label>
                         <input
-                          type="tel"
+                          type="text"
+                          name="direccion"
                           className="form-control"
-                          id="phone"
-                          name="phone"
-                          placeholder="+51 976205154"
-                          required
+                          placeholder="Dirección"
+                          value={datos.direccion || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="name">Telefono:</label>
+                        <input
+                          type="text"
+                          name="telefono"
+                          className="form-control"
+                          placeholder="Telefono"
+                          value={datos.telefono || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                     </div>
@@ -182,48 +178,90 @@ const Vehiculo = () => {
                         <label htmlFor="name">Apellidos:</label>
                         <input
                           type="text"
+                          name="apellidos"
                           className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Apellidos completos"
-                          required
+                          placeholder="Apellidos"
+                          value={datos.apellidos || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="form-group">
-                        <label htmlFor="name">País:</label>
+                        <label htmlFor="name">Pais:</label>
                         <input
                           type="text"
+                          name="pais"
                           className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Perú"
-                          required
+                          placeholder="pais"
+                          value={datos.pais || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="form-group">
                         <label htmlFor="name">Distrito:</label>
                         <input
                           type="text"
+                          name="distrito"
                           className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="Lima"
-                          required
+                          placeholder="Distrito"
+                          value={datos.distrito || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                       <div className="form-group">
                         <label htmlFor="name">Telefono alternativo:</label>
                         <input
                           type="text"
+                          name="telefonoalternativo"
                           className="form-control"
-                          id="name"
-                          name="name"
-                          placeholder="+51 986521023"
+                          placeholder="Telefono Alternativo"
+                          value={datos.telefonoalternativo || ""}
+                          onChange={handleInputChange}
                         />
                       </div>
                     </div>
                     <div className="col-md-4">
-                      <Fecha />
+                      <div className="form-group">
+                        <label htmlFor="name">Fecha inicio:</label>
+                        <input
+                          type="date"
+                          name="fechainicio"
+                          className="form-control"
+                          value={datos.fechainicio || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="name">Fecha fin:</label>
+                        <input
+                          type="date"
+                          name="fechafin"
+                          className="form-control"
+                          value={datos.fechafin || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="name">Lugar recojo:</label>
+                        <input
+                          type="text"
+                          name="lugarrecojo"
+                          className="form-control"
+                          placeholder="Lugar recojo"
+                          value={datos.lugarrecojo || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label htmlFor="name">Lugar devolucion:</label>
+                        <input
+                          type="text"
+                          name="lugardevolucion"
+                          className="form-control"
+                          placeholder="Lugar devolucion"
+                          value={datos.lugardevolucion || ""}
+                          onChange={handleInputChange}
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -234,20 +272,157 @@ const Vehiculo = () => {
                       checked={isChecked}
                       onChange={() => setIsChecked(!isChecked)}
                     />
-                    <label className="form-check-label" id="mi-checkbox">
-                      Acepto los terminos y condiciones
+                    <label>
+                      Acepto los
+                      <strong onClick={handleLabelClick}>
+                        &nbsp;Términos y Condiciones
+                      </strong>
                     </label>
                   </div>
-                  <div className="container-button">
-                    <button
-                      className="btn btn-dark btn-sm p-2"
-                      onClick={handleClick}
-                      disabled={!isChecked}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
+                  <button type="submit" className="btn btn-dark">
+                    Siguiente
+                  </button>
                 </form>
+                <Modal
+                  size="xl"
+                  show={showModal2}
+                  onHide={() => setShowModal2(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Resumen de datos</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <div className="container">
+                      <div className="row">
+                        <div className="col">
+                          <ul>
+                            <li>Nombres: {datos.nombre}</li>
+                            <li>Apellidos: {datos.apellidos}</li>
+                            <li>Pais: {datos.pais}</li>
+                            <li>Distrito: {datos.distrito}</li>
+                            <li>Correo electronico: {datos.email}</li>
+                            <li>Direccion: {datos.direccion}</li>
+                            <li>Telefono: {datos.telefono}</li>
+                            <li>
+                              Telefono alternativo: {datos.telefonoalternativo}
+                            </li>
+                            <li>Fecha inicio: {datos.fechainicio}</li>
+                            <li>Fecha fin: {datos.fechafin}</li>
+                            <li>Dias de alquiler: {}</li>
+                          </ul>
+                        </div>
+                        <div className="col">
+                          <li>Placa: {vehiculo.placa}</li>
+                          <li>Asientos: {vehiculo.asientos}</li>
+                          <li>Marca: {vehiculo.marca}</li>
+                          <li>Modelo: {vehiculo.modelo}</li>
+                          <li>Año: {vehiculo.anio}</li>
+                          <li>Combustible: {vehiculo.combustible}</li>
+                          <li>Manejo: {vehiculo.manejo}</li>
+                          <li>Lugar de recojo: {datos.lugarrecojo}</li>
+                          <li>Lugar de devolucion: {datos.lugardevolucion}</li>
+                          <br />
+                          <h5>
+                            <strong>PRECIO:</strong> S/. {}
+                          </h5>
+                        </div>
+                      </div>
+                    </div>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowModal2(false)}
+                    >
+                      Cerrar
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+                <Modal
+                  size="xl"
+                  show={showModal}
+                  onHide={() => setShowModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>
+                      <strong>Terminos y Condiciones</strong>
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <h3>
+                      Antes de continuar con tu pago, lee nuestras condiciones:
+                    </h3>
+                    <ol>
+                      <li>
+                        Si desea realizar alguna cancelación, cambio de horario,
+                        vehiculo u otro, debe acercarse personalmente a las
+                        oficinas de Rent Car´s ubicada en Av. Cesar Vallejo
+                        cruce con Av. Jorge Chavez, cuadra 50.
+                      </li>
+                      <li>
+                        Al momento de usted recibir el vehiculo solicitado, debe
+                        de firmar las hojas que le entregará nuestro personal de
+                        flota, en el cual está detallada como se le está dejando
+                        el vehiculo, tanto al interior, como al exterior,
+                        herramientas, accesorios, funcionalidades, etc.
+                      </li>
+                      <li>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Quis maxime dolore labore, earum nisi nesciunt corporis
+                        minima illo nam dolores, impedit molestias culpa
+                        eveniet, inventore quas repudiandae necessitatibus!
+                        Unde, ipsam. Lorem ipsum, dolor sit amet consectetur
+                        adipisicing elit. Explicabo possimus labore esse quas
+                        recusandae quaerat itaque a, repellendus inventore
+                        soluta cumque numquam id commodi, minima praesentium
+                        corporis debitis ipsam dolor. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Doloremque ducimus aliquam
+                        laudantium totam laborum ut saepe, asperiores, nesciunt
+                        quasi consectetur non repudiandae accusamus. Dolorem,
+                        omnis quisquam! Itaque asperiores nesciunt libero.
+                      </li>
+                      <li>
+                        Lorem, ipsum dolor sit amet consectetur adipisicing
+                        elit. Tempora ab hic error cupiditate sit in sequi at
+                        unde a dolorem aut, perferendis ut non molestiae nemo
+                        inventore asperiores. Voluptatum, sit! Lorem ipsum dolor
+                        sit amet consectetur adipisicing elit. Non, quam
+                        pariatur possimus architecto hic tempora nam eaque
+                        veritatis, earum quas commodi dolores illum ratione
+                        exercitationem nesciunt unde quia ducimus iure! Lorem
+                        ipsum dolor sit amet consectetur, adipisicing elit.
+                        Molestiae soluta similique, iure temporibus excepturi
+                        dicta aliquam voluptatum explicabo voluptas provident
+                        adipisci ex quasi eaque inventore! Eius nemo beatae
+                        necessitatibus explicabo!
+                      </li>
+                      <li>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. Dicta quisquam, fugit, architecto non quasi
+                        reprehenderit pariatur ab, ipsa sunt numquam cumque.
+                        Fuga in animi facilis officiis inventore. Explicabo,
+                        consectetur exercitationem. Lorem ipsum dolor sit amet
+                        consectetur adipisicing elit. Commodi hic soluta itaque
+                        magni id, architecto quam blanditiis in labore
+                        excepturi, doloremque inventore laborum! Commodi, cumque
+                        animi? Dolorem, assumenda fugiat? Nobis! Lorem ipsum
+                        dolor sit amet consectetur adipisicing elit. Blanditiis
+                        illum dolorum, aliquam quam possimus amet at qui odit a
+                        quia sapiente sunt maxime mollitia quos delectus sed,
+                        eligendi quod autem.
+                      </li>
+                    </ol>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button
+                      variant="secondary"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cerrar
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
               </div>
             </div>
           </div>
