@@ -35,6 +35,7 @@ const Contactanos = () => {
         <h1>Contáctanos</h1>
         <p>Puedes contactarte con nosotros por aquí.</p>
       </div>
+
       <div className="container mt-5 ">
         <div className="contenedor-padre-contactanos">
           <div className="contenedor-cards-contactanos col-lg-3 col-md-6 col-sm-6">
@@ -85,6 +86,7 @@ const Contactanos = () => {
           </div>
         </div>
       </div>
+      
       <div className="container mt-5">
         <h4>Contáctanos</h4>
         <p>

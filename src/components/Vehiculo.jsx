@@ -5,37 +5,64 @@ import Consejos from "./Consejos";
 import "../styles/Vehiculo.css";
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import moment from "moment";
+import moment from "moment/moment";
 
-const Vehiculo = (props) => {
+const Vehiculo = () => {
+  /*const [datos, setDatos] = useState({});*/
+  const [checkActivo, setCheckActivo] = useState(false);
+
+  const [reservaExitosa, setReservaExitosa] = useState(false);
+
   const [showModal, setShowModal] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
 
-  const [datos, setDatos] = useState({});
   const [showModal2, setShowModal2] = useState(false);
 
-  const [fecha, setFecha] = useState("");
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
+  const [email, setEmail] = useState("");
+  const [pais, setPais] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [distrito, setDistrito] = useState("");
+  const [telefono1, setTelefono1] = useState("");
+  const [telefono2, setTelefono2] = useState("");
+  const [lugarrecojo, setLugarRecojo] = useState("");
+  const [lugardevolucion, setLugarDevolucion] = useState("");
+  const [vehiculo, setVehiculo] = useState(null);
+  const [precioFinal, setPrecioFinal] = useState(0);
+  const [fecha1, setFecha1] = useState("");
+  const [fecha2, setFecha2] = useState("");
+  const [diferencia, setDiferencia] = useState(0);
 
+  /*
   const handleInputChange = (event) => {
     setDatos({ ...datos, [event.target.name]: event.target.value });
     setFecha(event.target.value);
-    console.log(fecha)
+    console.log(fecha);
   };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setShowModal2(true);
-  };
+  */
 
   /**Terminos y condiciones */
   const handleLabelClick = () => {
     setShowModal(true);
   };
 
+  /*Check */
+  const manejarCambioCheck = (evento) => {
+    setCheckActivo(evento.target.checked);
+  };
+
+  /* Resumen */
+  const mostrarModalDeResumen = (event) => {
+    const dias = moment(fecha2).diff(moment(fecha1), "days");
+    const precioTotal = vehiculo.precio * diferencia;
+    setDiferencia(dias);
+    setPrecioFinal(precioTotal);
+    event.preventDefault();
+    setShowModal2(true);
+  };
+
+  /* Encontrando vehiculo x id */
   const params = useParams();
-
-  const [vehiculo, setVehiculo] = useState(null);
-
   useEffect(() => {
     const obtenerVehiculo = async () => {
       try {
@@ -51,9 +78,73 @@ const Vehiculo = (props) => {
         console.log(error);
       }
     };
-
     obtenerVehiculo();
   }, [params.id]);
+
+  /*Calcular */
+  const calcularPrecioFinal = () => {
+    const dias = moment(fecha2).diff(moment(fecha1), "days");
+    const precioTotal = vehiculo.precio * diferencia;
+    setDiferencia(dias);
+    setPrecioFinal(precioTotal);
+  };
+
+  /*Metodo CREAR*/
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const alquilerUrl =
+      "http://localhost:8080/alquilervehiculos/api/alquileres";
+    const vehiculoUrl = `http://localhost:8080/alquilervehiculos/api/vehiculos/${vehiculo.id}`;
+
+    const fecha1_c = new Date(fecha1);
+    const fecha2_c = new Date(fecha2);
+
+    const alquilerData = {
+      nombres: nombres,
+      apellidos: apellidos,
+      email: email,
+      pais: pais,
+      direccion: direccion,
+      distrito: distrito,
+      telefono1: telefono1,
+      telefono2: telefono2,
+      lugarrecojo: lugarrecojo,
+      lugardevolucion: lugardevolucion,
+      preciofinal: precioFinal,
+      fechainicio: fecha1_c,
+      fechafin: fecha2_c,
+      vehiculo: {
+        id: vehiculo.id,
+      },
+    };
+
+    const vehiculoData = {
+      estado: false,
+    };
+
+    const alquilerResponse = await fetch(alquilerUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(alquilerData),
+    });
+
+    const alquilerResponseData = await alquilerResponse.json();
+    console.log(alquilerResponseData);
+
+    const vehiculoResponse = await fetch(vehiculoUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(vehiculoData),
+    });
+
+    const vehiculoResponseData = await vehiculoResponse.json();
+    console.log(vehiculoResponseData);
+    setReservaExitosa(true);
+  };
 
   return (
     <>
@@ -65,6 +156,7 @@ const Vehiculo = (props) => {
               Puedes reservar el vehículo o alquilar aquí, siguiendo los pasos
             </p>
           </div>
+
           <div className="mt-5 contenedor-hijo-adicional">
             <div className="columna-1">
               <div className="contenedor-vehiculo-foto d-flex justify-content-center align-items-center">
@@ -125,152 +217,148 @@ const Vehiculo = (props) => {
             <div className="contenedor-hijo-adicional">
               <div className="container">
                 <h4>Complete los datos:</h4>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={mostrarModalDeResumen}>
                   <div className="row">
                     <div className="col-md-4">
-                      <div className="form-group">
-                        <label htmlFor="name">Nombre:</label>
-                        <input
-                          type="text"
-                          name="nombre"
-                          className="form-control"
-                          placeholder="Nombres completos"
-                          value={datos.nombre || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Email:</label>
-                        <input
-                          type="text"
-                          name="email"
-                          className="form-control"
-                          placeholder="Correo Electronico"
-                          value={datos.email || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Direccion:</label>
-                        <input
-                          type="text"
-                          name="direccion"
-                          className="form-control"
-                          placeholder="Dirección"
-                          value={datos.direccion || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Telefono:</label>
-                        <input
-                          type="text"
-                          name="telefono"
-                          className="form-control"
-                          placeholder="Telefono"
-                          value={datos.telefono || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
+                      <label>Nombre:</label>
+                      <input
+                        type="text"
+                        name="nombre"
+                        className="form-control col-12"
+                        value={nombres}
+                        placeholder="Ingrese sus nombres"
+                        onChange={(e) => setNombres(e.target.value)}
+                      />
                     </div>
                     <div className="col-md-4">
-                      <div className="form-group">
-                        <label htmlFor="name">Apellidos:</label>
-                        <input
-                          type="text"
-                          name="apellidos"
-                          className="form-control"
-                          placeholder="Apellidos"
-                          value={datos.apellidos || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Pais:</label>
-                        <input
-                          type="text"
-                          name="pais"
-                          className="form-control"
-                          placeholder="pais"
-                          value={datos.pais || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Distrito:</label>
-                        <input
-                          type="text"
-                          name="distrito"
-                          className="form-control"
-                          placeholder="Distrito"
-                          value={datos.distrito || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Telefono alternativo:</label>
-                        <input
-                          type="text"
-                          name="telefonoalternativo"
-                          className="form-control"
-                          placeholder="Telefono Alternativo"
-                          value={datos.telefonoalternativo || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
+                      <label htmlFor="name">Apellidos:</label>
+                      <input
+                        type="text"
+                        name="apellidos"
+                        className="form-control"
+                        value={apellidos}
+                        placeholder="Ingrese sus apellidos"
+                        onChange={(e) => setApellidos(e.target.value)}
+                      />
                     </div>
                     <div className="col-md-4">
-                      <div className="form-group">
-                        <label htmlFor="name">Fecha inicio:</label>
-                        <input
-                          type="date"
-                          name="fechainicio"
-                          className="form-control"
-                          value={datos.fechainicio || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Fecha fin:</label>
-                        <input
-                          type="date"
-                          name="fechafin"
-                          className="form-control"
-                          value={datos.fechafin || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Lugar recojo:</label>
-                        <input
-                          type="text"
-                          name="lugarrecojo"
-                          className="form-control"
-                          placeholder="Lugar recojo"
-                          value={datos.lugarrecojo || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="name">Lugar devolucion:</label>
-                        <input
-                          type="text"
-                          name="lugardevolucion"
-                          className="form-control"
-                          placeholder="Lugar devolucion"
-                          value={datos.lugardevolucion || ""}
-                          onChange={handleInputChange}
-                        />
-                      </div>
+                      <label htmlFor="name">Email:</label>
+                      <input
+                        type="text"
+                        name="email"
+                        className="form-control"
+                        value={email}
+                        placeholder="Ingrese su Correo Electrónico"
+                        onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-2">
+                      <label htmlFor="name">Pais:</label>
+                      <input
+                        type="text"
+                        name="pais"
+                        className="form-control"
+                        value={pais}
+                        placeholder="Ingrese su país"
+                        onChange={(e) => setPais(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-3">
+                      <label htmlFor="name">Distrito:</label>
+                      <input
+                        type="text"
+                        name="distrito"
+                        className="form-control"
+                        value={distrito}
+                        placeholder="Ingrese su distrito"
+                        onChange={(e) => setDistrito(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-7">
+                      <label htmlFor="name">Direccion:</label>
+                      <input
+                        type="text"
+                        name="direccion"
+                        className="form-control"
+                        value={direccion}
+                        placeholder="Ingrese su dirección"
+                        onChange={(e) => setDireccion(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-3">
+                      <label htmlFor="name">Telefono:</label>
+                      <input
+                        type="text"
+                        name="telefono"
+                        className="form-control"
+                        value={telefono1}
+                        placeholder="Ingrese su telefono"
+                        onChange={(e) => setTelefono1(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-3">
+                      <label htmlFor="name">Telefono alternativo:</label>
+                      <input
+                        type="text"
+                        name="telefonoalternativo"
+                        className="form-control"
+                        placeholder="Ingrese un número alternativo"
+                        value={telefono2}
+                        onChange={(e) => setTelefono2(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="col-md-3">
+                      <label htmlFor="name">Fecha inicio:</label>
+                      <input
+                        type="date"
+                        name="fechainicio"
+                        className="form-control"
+                        value={fecha1}
+                        onChange={(e) => setFecha1(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-3">
+                      <label htmlFor="name">Fecha fin:</label>
+                      <input
+                        type="date"
+                        name="fechafin"
+                        className="form-control"
+                        value={fecha2}
+                        onChange={(e) => setFecha2(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="name">Lugar recojo:</label>
+                      <input
+                        type="text"
+                        name="lugarrecojo"
+                        className="form-control"
+                        value={lugarrecojo}
+                        placeholder="Ingrese en donde va recoger el carro"
+                        onChange={(e) => setLugarRecojo(e.target.value)}
+                      />
+                    </div>
+                    <div className="col-md-6">
+                      <label htmlFor="name">Lugar devolucion:</label>
+                      <input
+                        type="text"
+                        name="lugardevolucion"
+                        className="form-control"
+                        value={lugardevolucion}
+                        placeholder="Ingrese en donde va devolver el carro"
+                        onChange={(e) => setLugarDevolucion(e.target.value)}
+                      />
                     </div>
                   </div>
 
                   <div className="form-check">
                     <input
-                      className="form-check-input"
                       type="checkbox"
-                      checked={isChecked}
-                      onChange={() => setIsChecked(!isChecked)}
+                      id="mi-checkbox"
+                      className="form-check-input"
+                      checked={checkActivo}
+                      onChange={manejarCambioCheck}
                     />
                     <label>
                       Acepto los
@@ -279,10 +367,19 @@ const Vehiculo = (props) => {
                       </strong>
                     </label>
                   </div>
-                  <button type="submit" className="btn btn-dark">
+                  <button
+                    disabled={!checkActivo}
+                    type="submit"
+                    className="btn btn-dark"
+                  >
                     Siguiente
                   </button>
                 </form>
+                <button onClick={calcularPrecioFinal}>GENERAR</button>
+                <div>Los dias para alquilar es de {fecha1}</div>
+                <div>Los dias para alquilar es de {fecha2}</div>
+                <div>Dias de alquiler {diferencia}</div>
+                <div>El precio final es {precioFinal}</div>
                 <Modal
                   size="xl"
                   show={showModal2}
@@ -293,40 +390,103 @@ const Vehiculo = (props) => {
                   </Modal.Header>
                   <Modal.Body>
                     <div className="container">
-                      <div className="row">
-                        <div className="col">
-                          <ul>
-                            <li>Nombres: {datos.nombre}</li>
-                            <li>Apellidos: {datos.apellidos}</li>
-                            <li>Pais: {datos.pais}</li>
-                            <li>Distrito: {datos.distrito}</li>
-                            <li>Correo electronico: {datos.email}</li>
-                            <li>Direccion: {datos.direccion}</li>
-                            <li>Telefono: {datos.telefono}</li>
+                      <form onSubmit={handleSubmit}>
+                        <div className="row">
+                          <div className="col">
+                            <ul>
+                              <li>
+                                <strong>ID:</strong> {vehiculo.id}
+                              </li>
+                              <li>
+                                <strong>Nombres:</strong> {nombres}
+                              </li>
+                              <li>
+                                <strong>Apellidos:</strong> {apellidos}
+                              </li>
+                              <li>
+                                <strong>Pais:</strong> {pais}
+                              </li>
+                              <li>
+                                <strong>Distrito:</strong> {distrito}
+                              </li>
+                              <li>
+                                <strong>Correo electronico:</strong> {email}
+                              </li>
+                              <li>
+                                <strong>Direccion:</strong> {direccion}
+                              </li>
+                              <li>
+                                <strong>Telefono:</strong> {telefono1}
+                              </li>
+                              <li>
+                                <strong>Telefono alternativo:</strong>{" "}
+                                {telefono2}
+                              </li>
+                              <li>
+                                <strong>Fecha inicio:</strong> {fecha1}
+                              </li>
+                              <li>
+                                <strong>Fecha fin:</strong> {fecha2}
+                              </li>
+                              <li>
+                                <strong>Dias de alquiler:</strong> {diferencia}
+                              </li>
+                            </ul>
+                          </div>
+                          <div className="col">
                             <li>
-                              Telefono alternativo: {datos.telefonoalternativo}
+                              <strong>Placa:</strong> {vehiculo.placa}
                             </li>
-                            <li>Fecha inicio: {datos.fechainicio}</li>
-                            <li>Fecha fin: {datos.fechafin}</li>
-                            <li>Dias de alquiler: {}</li>
-                          </ul>
+                            <li>
+                              <strong>Asientos:</strong> {vehiculo.asientos}
+                            </li>
+                            <li>
+                              <strong>Marca: </strong>
+                              {vehiculo.marca}
+                            </li>
+                            <li>
+                              <strong>Modelo:</strong> {vehiculo.modelo}
+                            </li>
+                            <li>
+                              <strong>Año:</strong> {vehiculo.anio}
+                            </li>
+                            <li>
+                              <strong>Combustible:</strong>{" "}
+                              {vehiculo.combustible}
+                            </li>
+                            <li>
+                              <strong>Manejo: </strong>
+                              {vehiculo.manejo}
+                            </li>
+                            <li>
+                              <strong>Lugar de devolucion:</strong>
+                              {lugarrecojo}
+                            </li>
+                            <li>
+                              <strong>Lugar de devolucion:</strong>{" "}
+                              {lugardevolucion}
+                            </li>
+                            <br />
+                            <h1>
+                              <strong>PRECIO: S/. {precioFinal}</strong>
+                            </h1>
+                          </div>
                         </div>
-                        <div className="col">
-                          <li>Placa: {vehiculo.placa}</li>
-                          <li>Asientos: {vehiculo.asientos}</li>
-                          <li>Marca: {vehiculo.marca}</li>
-                          <li>Modelo: {vehiculo.modelo}</li>
-                          <li>Año: {vehiculo.anio}</li>
-                          <li>Combustible: {vehiculo.combustible}</li>
-                          <li>Manejo: {vehiculo.manejo}</li>
-                          <li>Lugar de recojo: {datos.lugarrecojo}</li>
-                          <li>Lugar de devolucion: {datos.lugardevolucion}</li>
-                          <br />
-                          <h5>
-                            <strong>PRECIO:</strong> S/. {}
-                          </h5>
-                        </div>
-                      </div>
+
+                        {!reservaExitosa ? (
+                          <>
+                            <button className="btn btn-dark">Reservar</button>
+                          </>
+                        ) : (
+                          <>
+                            <button className="btn btn-dark" disabled>
+                              Reservar
+                            </button>
+                            <hr />
+                            <h5>Reserva exitosa</h5>
+                          </>
+                        )}
+                      </form>
                     </div>
                   </Modal.Body>
                   <Modal.Footer>
