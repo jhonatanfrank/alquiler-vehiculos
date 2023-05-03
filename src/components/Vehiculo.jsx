@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Spinner from "./Spinner";
 import Consejos from "./Consejos";
 import "../styles/Vehiculo.css";
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment/moment";
+import jsPDF from "jspdf";
 
 const Vehiculo = () => {
-  /*const [datos, setDatos] = useState({});*/
   const [checkActivo, setCheckActivo] = useState(false);
-
   const [reservaExitosa, setReservaExitosa] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
-
   const [showModal2, setShowModal2] = useState(false);
-
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
   const [email, setEmail] = useState("");
@@ -32,6 +28,7 @@ const Vehiculo = () => {
   const [fecha1, setFecha1] = useState("");
   const [fecha2, setFecha2] = useState("");
   const [diferencia, setDiferencia] = useState(0);
+  const [codigo, setCodigo] = useState("");
 
   /*
   const handleInputChange = (event) => {
@@ -80,14 +77,6 @@ const Vehiculo = () => {
     };
     obtenerVehiculo();
   }, [params.id]);
-
-  /*Calcular */
-  const calcularPrecioFinal = () => {
-    const dias = moment(fecha2).diff(moment(fecha1), "days");
-    const precioTotal = vehiculo.precio * diferencia;
-    setDiferencia(dias);
-    setPrecioFinal(precioTotal);
-  };
 
   /*Metodo CREAR*/
   const handleSubmit = async (e) => {
@@ -144,6 +133,81 @@ const Vehiculo = () => {
     const vehiculoResponseData = await vehiculoResponse.json();
     console.log(vehiculoResponseData);
     setReservaExitosa(true);
+
+    /*IDENTIFICADOR DE ALQUILER */
+  };
+
+  const obtenerNombres = (event) => {
+    setNombres(event.target.value);
+  };
+
+  const obtenerApellidos = (event) => {
+    setApellidos(event.target.value);
+  };
+
+  const obtenerEmail = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const obtenerPais = (event) => {
+    setPais(event.target.value);
+  };
+
+  const obtenerDistrito = (event) => {
+    setDistrito(event.target.value);
+  };
+
+  const obtenerDireccion = (event) => {
+    setDireccion(event.target.value);
+  };
+
+  const obtenerTelefono1 = (event) => {
+    setTelefono1(event.target.value);
+  };
+
+  const obtenerTelefono2 = (event) => {
+    setTelefono2(event.target.value);
+  };
+
+  const obtenerLugarRecojo = (event) => {
+    setLugarRecojo(event.target.value);
+  };
+
+  const obtenerLugarDevolucion = (event) => {
+    setLugarDevolucion(event.target.value);
+  };
+
+  useEffect(() => {
+    if (fecha1 && fecha2) {
+      const diff = moment(fecha2).diff(moment(fecha1), "days");
+      setDiferencia(diff);
+    }
+  }, [fecha1, fecha2]);
+
+  useEffect(() => {
+    const nuevoCodigo = Math.floor(Math.random() * 100000000).toString();
+    setCodigo(nuevoCodigo);
+  }, []);
+
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+    const texto = `
+    Código: ${codigo}
+    Nombre: ${nombres}    
+    Apellido: ${apellidos}
+    Correo electrónico: ${email}
+    País: ${pais}
+    Distrito: ${distrito}
+    Direccion: ${direccion}
+    Telefono: ${telefono1}
+    Telefono alternativo: ${telefono2}
+    Fecha inicio: ${fecha1}
+    Fecha fin: ${fecha2}
+    Lugar recojo: ${lugarrecojo}
+    Lugar devolucion: ${lugardevolucion}
+  `;
+    doc.text(texto, 10, 10);
+    doc.save("ALQUILER " + codigo + " " + nombres + " " + apellidos + ".pdf");
   };
 
   return (
@@ -227,7 +291,7 @@ const Vehiculo = () => {
                         className="form-control col-12"
                         value={nombres}
                         placeholder="Ingrese sus nombres"
-                        onChange={(e) => setNombres(e.target.value)}
+                        onChange={obtenerNombres}
                       />
                     </div>
                     <div className="col-md-4">
@@ -238,7 +302,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={apellidos}
                         placeholder="Ingrese sus apellidos"
-                        onChange={(e) => setApellidos(e.target.value)}
+                        onChange={obtenerApellidos}
                       />
                     </div>
                     <div className="col-md-4">
@@ -249,7 +313,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={email}
                         placeholder="Ingrese su Correo Electrónico"
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={obtenerEmail}
                       />
                     </div>
                     <div className="col-md-2">
@@ -260,7 +324,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={pais}
                         placeholder="Ingrese su país"
-                        onChange={(e) => setPais(e.target.value)}
+                        onChange={obtenerPais}
                       />
                     </div>
                     <div className="col-md-3">
@@ -271,7 +335,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={distrito}
                         placeholder="Ingrese su distrito"
-                        onChange={(e) => setDistrito(e.target.value)}
+                        onChange={obtenerDistrito}
                       />
                     </div>
                     <div className="col-md-7">
@@ -282,7 +346,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={direccion}
                         placeholder="Ingrese su dirección"
-                        onChange={(e) => setDireccion(e.target.value)}
+                        onChange={obtenerDireccion}
                       />
                     </div>
                     <div className="col-md-3">
@@ -293,7 +357,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={telefono1}
                         placeholder="Ingrese su telefono"
-                        onChange={(e) => setTelefono1(e.target.value)}
+                        onChange={obtenerTelefono1}
                       />
                     </div>
                     <div className="col-md-3">
@@ -304,13 +368,14 @@ const Vehiculo = () => {
                         className="form-control"
                         placeholder="Ingrese un número alternativo"
                         value={telefono2}
-                        onChange={(e) => setTelefono2(e.target.value)}
+                        onChange={obtenerTelefono2}
                       />
                     </div>
 
                     <div className="col-md-3">
                       <label htmlFor="name">Fecha inicio:</label>
                       <input
+                        id="fecha1"
                         type="date"
                         name="fechainicio"
                         className="form-control"
@@ -321,6 +386,7 @@ const Vehiculo = () => {
                     <div className="col-md-3">
                       <label htmlFor="name">Fecha fin:</label>
                       <input
+                        id="fecha2"
                         type="date"
                         name="fechafin"
                         className="form-control"
@@ -336,7 +402,7 @@ const Vehiculo = () => {
                         className="form-control"
                         value={lugarrecojo}
                         placeholder="Ingrese en donde va recoger el carro"
-                        onChange={(e) => setLugarRecojo(e.target.value)}
+                        onChange={obtenerLugarRecojo}
                       />
                     </div>
                     <div className="col-md-6">
@@ -347,12 +413,12 @@ const Vehiculo = () => {
                         className="form-control"
                         value={lugardevolucion}
                         placeholder="Ingrese en donde va devolver el carro"
-                        onChange={(e) => setLugarDevolucion(e.target.value)}
+                        onChange={obtenerLugarDevolucion}
                       />
                     </div>
                   </div>
 
-                  <div className="form-check">
+                  <div className="form-check mt-3">
                     <input
                       type="checkbox"
                       id="mi-checkbox"
@@ -375,11 +441,7 @@ const Vehiculo = () => {
                     Siguiente
                   </button>
                 </form>
-                <button onClick={calcularPrecioFinal}>GENERAR</button>
-                <div>Los dias para alquilar es de {fecha1}</div>
-                <div>Los dias para alquilar es de {fecha2}</div>
-                <div>Dias de alquiler {diferencia}</div>
-                <div>El precio final es {precioFinal}</div>
+
                 <Modal
                   size="xl"
                   show={showModal2}
@@ -391,87 +453,87 @@ const Vehiculo = () => {
                   <Modal.Body>
                     <div className="container">
                       <form onSubmit={handleSubmit}>
-                        <div className="row">
-                          <div className="col">
-                            <ul>
+                        {!reservaExitosa ? (
+                          <div className="row">
+                            <div className="col">
+                              <ul>
+                                <li>
+                                  <strong>Nombres:</strong> {nombres}
+                                </li>
+                                <li>
+                                  <strong>Apellidos:</strong> {apellidos}
+                                </li>
+                                <li>
+                                  <strong>Pais:</strong> {pais}
+                                </li>
+                                <li>
+                                  <strong>Distrito:</strong> {distrito}
+                                </li>
+                                <li>
+                                  <strong>Correo electronico:</strong> {email}
+                                </li>
+                                <li>
+                                  <strong>Direccion:</strong> {direccion}
+                                </li>
+                                <li>
+                                  <strong>Telefono:</strong> {telefono1}
+                                </li>
+                                <li>
+                                  <strong>Telefono alternativo:</strong>{" "}
+                                  {telefono2}
+                                </li>
+                                <li>
+                                  <strong>Fecha inicio:</strong> {fecha1}
+                                </li>
+                                <li>
+                                  <strong>Fecha fin:</strong> {fecha2}
+                                </li>
+                                <li>
+                                  <strong>Dias de alquiler:</strong>{" "}
+                                  {diferencia}
+                                </li>
+                              </ul>
+                            </div>
+                            <div className="col">
                               <li>
-                                <strong>ID:</strong> {vehiculo.id}
+                                <strong>Placa:</strong> {vehiculo.placa}
                               </li>
                               <li>
-                                <strong>Nombres:</strong> {nombres}
+                                <strong>Asientos:</strong> {vehiculo.asientos}
                               </li>
                               <li>
-                                <strong>Apellidos:</strong> {apellidos}
+                                <strong>Marca: </strong>
+                                {vehiculo.marca}
                               </li>
                               <li>
-                                <strong>Pais:</strong> {pais}
+                                <strong>Modelo:</strong> {vehiculo.modelo}
                               </li>
                               <li>
-                                <strong>Distrito:</strong> {distrito}
+                                <strong>Año:</strong> {vehiculo.anio}
                               </li>
                               <li>
-                                <strong>Correo electronico:</strong> {email}
+                                <strong>Combustible:</strong>{" "}
+                                {vehiculo.combustible}
                               </li>
                               <li>
-                                <strong>Direccion:</strong> {direccion}
+                                <strong>Manejo: </strong>
+                                {vehiculo.manejo}
                               </li>
                               <li>
-                                <strong>Telefono:</strong> {telefono1}
+                                <strong>Lugar de devolucion:</strong>
+                                {lugarrecojo}
                               </li>
                               <li>
-                                <strong>Telefono alternativo:</strong>{" "}
-                                {telefono2}
+                                <strong>Lugar de devolucion:</strong>{" "}
+                                {lugardevolucion}
                               </li>
-                              <li>
-                                <strong>Fecha inicio:</strong> {fecha1}
-                              </li>
-                              <li>
-                                <strong>Fecha fin:</strong> {fecha2}
-                              </li>
-                              <li>
-                                <strong>Dias de alquiler:</strong> {diferencia}
-                              </li>
-                            </ul>
+                              <br />
+                              <h1>
+                                <strong>PRECIO: S/. {precioFinal}</strong>
+                              </h1>
+                            </div>
                           </div>
-                          <div className="col">
-                            <li>
-                              <strong>Placa:</strong> {vehiculo.placa}
-                            </li>
-                            <li>
-                              <strong>Asientos:</strong> {vehiculo.asientos}
-                            </li>
-                            <li>
-                              <strong>Marca: </strong>
-                              {vehiculo.marca}
-                            </li>
-                            <li>
-                              <strong>Modelo:</strong> {vehiculo.modelo}
-                            </li>
-                            <li>
-                              <strong>Año:</strong> {vehiculo.anio}
-                            </li>
-                            <li>
-                              <strong>Combustible:</strong>{" "}
-                              {vehiculo.combustible}
-                            </li>
-                            <li>
-                              <strong>Manejo: </strong>
-                              {vehiculo.manejo}
-                            </li>
-                            <li>
-                              <strong>Lugar de devolucion:</strong>
-                              {lugarrecojo}
-                            </li>
-                            <li>
-                              <strong>Lugar de devolucion:</strong>{" "}
-                              {lugardevolucion}
-                            </li>
-                            <br />
-                            <h1>
-                              <strong>PRECIO: S/. {precioFinal}</strong>
-                            </h1>
-                          </div>
-                        </div>
+                        ) : null}
 
                         {!reservaExitosa ? (
                           <>
@@ -479,11 +541,21 @@ const Vehiculo = () => {
                           </>
                         ) : (
                           <>
-                            <button className="btn btn-dark" disabled>
-                              Reservar
-                            </button>
-                            <hr />
-                            <h5>Reserva exitosa</h5>
+                            <h5>¡Reserva exitosa!</h5>
+                            <h5>
+                              Conserve el siguiente codigo al momento de recoger
+                              el vehiculo: <strong>{codigo}</strong>
+                            </h5>
+                            <>
+                              <Link to="/vehiculos">
+                                <button
+                                  className="btn btn-dark"
+                                  onClick={exportarPDF}
+                                >
+                                  Exportar con el resumen PDF
+                                </button>
+                              </Link>
+                            </>
                           </>
                         )}
                       </form>

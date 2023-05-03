@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Novehiculos from "./components/Novehiculos";
 import Navbar from "./components/Navbar";
@@ -12,7 +12,6 @@ import Vehiculo from "./components/Vehiculo";
 import Footer from "./components/Footer";
 import Whatsappflotante from "./components/Whatsappflotante";
 import Terminoscondiciones from "./components/Terminoscondiciones";
-import Resumenalquiler from "./components/Resumenalquiler";
 import Pasarelapago from "./components/Pasarelapago";
 
 //localhost:8080/alquilervehiculos/api/vehiculos
@@ -24,10 +23,9 @@ function App() {
   const [cargando, setCargando] = useState(true);
   const [busquedaMarca, setBusquedaMarca] = useState("");
 
-  useEffect(() => {
+  const obtenerVehiculos = useCallback(() => {
     fetch("http://192.168.1.40:8080/alquilervehiculos/api/vehiculos")
       .then((response) => response.json())
-      .catch((error) => console.log(error))
       .then((data) => {
         // Filtrar vehículos con estado en 1
         const vehiculosFiltrados = data.filter(
@@ -41,6 +39,18 @@ function App() {
         //setCargando(false); // indicar que se ha terminado de cargar, aunque con error
       });
   }, []);
+
+  useEffect(() => {
+    obtenerVehiculos(); // Obtener vehículos al montar el componente
+
+    const intervalId = setInterval(() => {
+      obtenerVehiculos(); // Obtener vehículos periódicamente
+    }, 5000); // cada 5 segundos
+
+    return () => {
+      clearInterval(intervalId); // Limpiar intervalo al desmontar componente
+    };
+  }, [obtenerVehiculos]);
 
   const handleChangeMarca = (e) => {
     setBusquedaMarca(e.target.value);
