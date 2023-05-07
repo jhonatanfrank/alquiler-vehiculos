@@ -12,7 +12,6 @@ import Vehiculo from "./components/Vehiculo";
 import Footer from "./components/Footer";
 import Whatsappflotante from "./components/Whatsappflotante";
 import Terminoscondiciones from "./components/Terminoscondiciones";
-import Pasarelapago from "./components/Pasarelapago";
 
 //localhost:8080/alquilervehiculos/api/vehiculos
 
@@ -133,7 +132,6 @@ function App() {
               <Route path="/contactanos" element={<Contactanos />} />
               <Route path="/vehiculos/:id" element={<Vehiculo />} />
               <Route path="/vehiculos/:id/terminos-y-condiciones" element={<Terminoscondiciones />} />
-              <Route path="/pasarela-de-pago" element={<Pasarelapago />} />
               <Route path="*" element={<Error />} />
             </Routes>
             <>
