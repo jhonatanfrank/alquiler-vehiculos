@@ -448,7 +448,7 @@ const Vehiculo = () => {
                   onHide={() => setShowModal2(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Resumen de datos</Modal.Title>
+                    <Modal.Title>Resumen del alquiler</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     <div className="container">
@@ -458,78 +458,132 @@ const Vehiculo = () => {
                             <div className="col">
                               <ul>
                                 <li>
-                                  <strong>Nombres:</strong> {nombres}
+                                  <strong>Nombres: </strong>
+                                  <span className="titulo-titulo">
+                                    {nombres}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Apellidos:</strong> {apellidos}
+                                  <strong>Apellidos: </strong>
+                                  <span className="titulo-titulo">
+                                    {apellidos}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Pais:</strong> {pais}
+                                  <strong>Pais: </strong>
+                                  <span className="titulo-titulo">{pais}</span>
                                 </li>
                                 <li>
-                                  <strong>Distrito:</strong> {distrito}
+                                  <strong>Distrito: </strong>
+                                  <span className="titulo-titulo">
+                                    {distrito}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Correo electronico:</strong> {email}
+                                  <strong>Correo electronico: </strong>
+                                  <span className="titulo-titulo">{email}</span>
                                 </li>
                                 <li>
-                                  <strong>Direccion:</strong> {direccion}
+                                  <strong>Direccion: </strong>
+                                  <span className="titulo-titulo">
+                                    {direccion}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Telefono:</strong> {telefono1}
+                                  <strong>Telefono: </strong>
+                                  <span className="titulo-titulo">
+                                    {telefono1}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Telefono alternativo:</strong>{" "}
-                                  {telefono2}
+                                  <strong>Telefono alternativo: </strong>
+                                  <span className="titulo-titulo">
+                                    {telefono2}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Fecha inicio:</strong> {fecha1}
+                                  <strong>Fecha inicio: </strong>
+                                  <span className="titulo-titulo">
+                                    {fecha1}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Fecha fin:</strong> {fecha2}
+                                  <strong>Fecha fin: </strong>
+                                  <span className="titulo-titulo">
+                                    {fecha2}
+                                  </span>
                                 </li>
                                 <li>
-                                  <strong>Dias de alquiler:</strong>{" "}
-                                  {diferencia}
+                                  <strong>Dias de alquiler: </strong>
+                                  <span className="titulo-titulo">
+                                    {diferencia}
+                                  </span>
                                 </li>
                               </ul>
                             </div>
                             <div className="col">
                               <li>
-                                <strong>Placa:</strong> {vehiculo.placa}
+                                <strong>Placa: </strong>
+                                <span className="titulo-titulo">
+                                  {vehiculo.placa}
+                                </span>
                               </li>
                               <li>
-                                <strong>Asientos:</strong> {vehiculo.asientos}
+                                <strong>Asientos: </strong>
+                                <span className="titulo-titulo">
+                                  {vehiculo.asientos}
+                                </span>
                               </li>
                               <li>
                                 <strong>Marca: </strong>
-                                {vehiculo.marca}
+                                <span className="titulo-titulo">
+                                  {vehiculo.marca}
+                                </span>
                               </li>
                               <li>
-                                <strong>Modelo:</strong> {vehiculo.modelo}
+                                <strong>Modelo: </strong>
+                                <span className="titulo-titulo">
+                                  {vehiculo.modelo}
+                                </span>
                               </li>
                               <li>
-                                <strong>Año:</strong> {vehiculo.anio}
+                                <strong>Año: </strong>
+                                <span className="titulo-titulo">
+                                  {vehiculo.anio}
+                                </span>
                               </li>
                               <li>
-                                <strong>Combustible:</strong>{" "}
-                                {vehiculo.combustible}
+                                <strong>Combustible: </strong>
+                                <span className="titulo-titulo">
+                                  {vehiculo.combustible}
+                                </span>
                               </li>
                               <li>
                                 <strong>Manejo: </strong>
-                                {vehiculo.manejo}
+
+                                <span className="titulo-titulo">
+                                  {vehiculo.manejo}
+                                </span>
                               </li>
                               <li>
-                                <strong>Lugar de devolucion:</strong>
-                                {lugarrecojo}
+                                <strong>Lugar de devolucion: </strong>
+
+                                <span className="titulo-titulo">
+                                  {lugarrecojo}
+                                </span>
                               </li>
                               <li>
-                                <strong>Lugar de devolucion:</strong>{" "}
-                                {lugardevolucion}
+                                <strong>Lugar de devolucion: </strong>
+                                <span className="titulo-titulo">
+                                  {lugardevolucion}
+                                </span>
                               </li>
                               <br />
                               <h1>
-                                <strong>PRECIO: S/. {precioFinal}</strong>
+                                <strong>
+                                  PRECIO FINAL: S/.
+                                  {precioFinal}
+                                </strong>
                               </h1>
                             </div>
                           </div>
@@ -541,12 +595,19 @@ const Vehiculo = () => {
                           </>
                         ) : (
                           <>
-                            <h5>¡Reserva exitosa!</h5>
-                            <h5>
-                              Conserve el siguiente codigo al momento de recoger
-                              el vehiculo: <strong>{codigo}</strong>
-                            </h5>
-                            <>
+                            <section>
+                              <h1 className="titulo-titulo">
+                                ¡Reserva exitosa!
+                              </h1>
+                              <br></br>
+                              <h5>
+                                Conserve el siguiente código al momento de
+                                recoger el vehiculo:{" "}
+                                <strong className="titulo-titulo">
+                                  {codigo}
+                                </strong>
+                              </h5>
+                              <br></br>
                               <Link to="/vehiculos">
                                 <button
                                   className="btn btn-dark"
@@ -555,7 +616,7 @@ const Vehiculo = () => {
                                   Exportar con el resumen PDF
                                 </button>
                               </Link>
-                            </>
+                            </section>
                           </>
                         )}
                       </form>
@@ -655,6 +716,7 @@ const Vehiculo = () => {
                     </Button>
                   </Modal.Footer>
                 </Modal>
+                
               </div>
             </div>
           </div>
