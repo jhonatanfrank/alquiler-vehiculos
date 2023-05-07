@@ -6,8 +6,8 @@
 
 .contenedor-box-shadow {
   background: rgb(255, 255, 255);
-  border-radius: 5px;
-  box-shadow: 0px 0px 10px -5px rgb(0, 0, 0);
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgb(0, 0, 0,0.25);
 }
 
 h1 {
