@@ -13,6 +13,7 @@ section {
   border: 1px solid #ddd;
   padding: 20px;
   text-align: center;
+  border: 0px;
 }
 
 footer {
@@ -26,7 +27,7 @@ footer {
   color: #333;
 }
 
-.imagen-error{
+.imagen-error {
   width: 100%;
   min-width: 45%;
   max-width: 700px;

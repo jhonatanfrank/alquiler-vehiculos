@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Spinner from "./Spinner";
-import Consejos from "./Consejos";
-import "../styles/Vehiculo.css";
+import { useParams } from "react-router-dom";
+import Spinner from "../components/Spinner";
+import Vehiculodetails from "../components/Vehiculodetails";
+import Consejos from "../components/Consejos";
+import Alquileresfecha from "./Alquileresfecha";
+
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import moment from "moment/moment";
 import jsPDF from "jspdf";
+import "../styles/Vehiculo.css";
+
 /* PAYPAL */
 import { CLIENT_ID } from "../config/config.js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -41,14 +45,9 @@ const Vehiculo = () => {
   const [fecha2, setFecha2] = useState("");
   const [diferencia, setDiferencia] = useState(0);
   const [codigo, setCodigo] = useState("");
-
-  /*
-  const handleInputChange = (event) => {
-    setDatos({ ...datos, [event.target.name]: event.target.value });
-    setFecha(event.target.value);
-    console.log(fecha);
-  };
-  */
+  const [alquiler, setAlquiler] = useState({});
+  const [cargando, setCargando] = useState(true);
+  const [placa, setPlaca] = useState(true);
 
   /* Modal de Terminos y condiciones */
   const modalTerminosCondiciones = () => {
@@ -80,7 +79,13 @@ const Vehiculo = () => {
           console.log("No se pudo obtener el vehículo");
         }
         const vehiculo = await respuesta.json();
+        setPlaca(vehiculo.placa);
         setVehiculo(vehiculo);
+
+        setTimeout(() => {
+          setCargando(false);
+        }, 1000);
+
         setPrecioVehiculo(vehiculo.precio);
       } catch (error) {
         console.log(error);
@@ -91,27 +96,6 @@ const Vehiculo = () => {
 
   /*Metodo CREAR*/
   useEffect(() => {
-    const exportarPDF = () => {
-      const doc = new jsPDF();
-      const texto = `
-    Código: ${codigo}
-    Nombre: ${nombres}    
-    Apellido: ${apellidos}
-    Correo electrónico: ${email}
-    País: ${pais}
-    Distrito: ${distrito}
-    Direccion: ${direccion}
-    Telefono: ${telefono1}
-    Telefono alternativo: ${telefono2}
-    Fecha inicio: ${fecha1}
-    Fecha fin: ${fecha2}
-    Lugar recojo: ${lugarrecojo}
-    Lugar devolucion: ${lugardevolucion}
-  `;
-      doc.text(texto, 10, 10);
-      doc.save("ALQUILER " + codigo + " " + nombres + " " + apellidos + ".pdf");
-    };
-
     const submitData = async () => {
       const alquilerUrl =
         "http://localhost:8080/alquilervehiculos/api/alquileres";
@@ -154,19 +138,20 @@ const Vehiculo = () => {
       const alquilerResponseData = await alquilerResponse.json();
       console.log(alquilerResponseData);
 
+      /*
       const vehiculoResponse = await fetch(vehiculoUrl, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(vehiculoData),
-      });
+      });    
 
       const vehiculoResponseData = await vehiculoResponse.json();
       console.log(vehiculoResponseData);
+      */
       setReservaExitosa(true);
     };
-
     if (success) {
       submitData();
       exportarPDF();
@@ -230,8 +215,10 @@ const Vehiculo = () => {
   const exportarPDF = () => {
     const doc = new jsPDF();
     const texto = `
-    Código: ${codigo}
-    Nombre: ${nombres}    
+    CÓDIGO DEL ALQUILER: ${codigo}
+
+    DATOS DEL ARRENDATARIO:
+    <h2>Nombre: ${nombres}</h2>
     Apellido: ${apellidos}
     Correo electrónico: ${email}
     País: ${pais}
@@ -239,8 +226,21 @@ const Vehiculo = () => {
     Direccion: ${direccion}
     Telefono: ${telefono1}
     Telefono alternativo: ${telefono2}
+
+    DATOS DEL VEHICULO:
+    Placa: ${vehiculo.placa}
+    Asientos: ${vehiculo.asientos}
+    Marca: ${vehiculo.marca.marca}
+    Modelo: ${vehiculo.modelo}
+    Año: ${vehiculo.anio}
+    Tipo de combustible: ${vehiculo.tipocombustible.tipocombustible}
+    Tipo de manejo: ${vehiculo.tipomanejo.tipomanejo}
+
+    FECHAS DEL ALQUILER:
     Fecha inicio: ${fecha1}
     Fecha fin: ${fecha2}
+
+    LUGAR DE ROCOJO Y DEVOLUCION:
     Lugar recojo: ${lugarrecojo}
     Lugar devolucion: ${lugardevolucion}
   `;
@@ -302,6 +302,16 @@ const Vehiculo = () => {
 
   /* PAYPAL FIN*/
 
+  /*INICIO HORA, MINUTOS, SEGUNDOS 
+
+  const horaMinutosSegundos = () => {
+    const time = new Date();
+    const hours = time.getHours().toString().padStart(2, "0"); // Agrega un cero si la hora es de un solo dígito
+    const minutes = time.getMinutes().toString().padStart(2, "0");
+    const seconds = time.getSeconds().toString().padStart(2, "0");
+    return `${hours}${minutes}${seconds}`;
+  };
+*/
   return (
     <>
       {vehiculo ? (
@@ -313,61 +323,22 @@ const Vehiculo = () => {
             </p>
           </div>
 
-          <div className="mt-5 contenedor-hijo-adicional">
-            <div className="columna-1">
-              <div className="contenedor-vehiculo-foto d-flex justify-content-center align-items-center">
-                <img
-                  className="vehiculo-foto-detalle"
-                  src={vehiculo.foto}
-                  alt="foto"
-                />
-              </div>
-            </div>
-            <div className="columna-2">
-              <div className="">
-                <div className="contenedor-detalle">
-                  <h3>Detalles</h3>
-                  <ul>
-                    <li className="li-detalle">
-                      <strong>Placa: </strong>
-                      <span className="titulo-titulo">{vehiculo.placa}</span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Marca: </strong>
-                      <span className="titulo-titulo">{vehiculo.marca}</span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Modelo: </strong>
-                      <span className="titulo-titulo">{vehiculo.modelo}</span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Año: </strong>
-                      <span className="titulo-titulo">{vehiculo.anio}</span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Combustible: </strong>
-                      <span className="titulo-titulo">
-                        {vehiculo.combustible}
-                      </span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Asientos: </strong>
-                      <span className="titulo-titulo">{vehiculo.asientos}</span>
-                    </li>
-                    <li className="li-detalle">
-                      <strong>Manejo: </strong>
-                      <span className="titulo-titulo">{vehiculo.manejo}</span>
-                    </li>
-                  </ul>
-                  <h4>
-                    Precio: <strong>S/.{vehiculo.precio}</strong> x día
-                  </h4>
-                </div>
-              </div>
-            </div>
-          </div>
-
+          <Vehiculodetails
+            placa={vehiculo.placa}
+            asientos={vehiculo.asientos}
+            marca={vehiculo.marca.marca}
+            modelo={vehiculo.modelo}
+            anio={vehiculo.anio}
+            precio={vehiculo.precio}
+            foto={vehiculo.foto}
+            tipocombustible={vehiculo.tipocombustible.tipocombustible}
+            tipomanejo={vehiculo.tipomanejo.tipomanejo}
+            descripcion={vehiculo.descripcion}
+            tapizadoasientos={vehiculo.tapizadoasientos.tapizadoasientos}
+            vehiculo={vehiculo}
+          />
           <Consejos />
+          <Alquileresfecha placa={vehiculo.placa} />
 
           <div className="contenedor-formulario contenedor-box-shadow mx-auto">
             <div className="contenedor-hijo-adicional">
@@ -642,8 +613,10 @@ const Vehiculo = () => {
                             <div>
                               {!success ? (
                                 <>
+                                  <Alquileresfecha placa={vehiculo.asiento} />
+
                                   <div className="row">
-                                    <div className="col">
+                                    <div className="col col-md-6">
                                       <ul>
                                         <li>
                                           <strong>Nombres: </strong>
@@ -688,9 +661,7 @@ const Vehiculo = () => {
                                           </span>
                                         </li>
                                         <li>
-                                          <strong>
-                                            Telefono alternativo:{" "}
-                                          </strong>
+                                          <strong>Telefono alternativo:</strong>
                                           <span className="titulo-titulo">
                                             {telefono2}
                                           </span>
@@ -715,7 +686,7 @@ const Vehiculo = () => {
                                         </li>
                                       </ul>
                                     </div>
-                                    <div className="col">
+                                    <div className="col col-md-6">
                                       <li>
                                         <strong>Placa: </strong>
                                         <span className="titulo-titulo">
@@ -731,7 +702,7 @@ const Vehiculo = () => {
                                       <li>
                                         <strong>Marca: </strong>
                                         <span className="titulo-titulo">
-                                          {vehiculo.marca}
+                                          {vehiculo.marca.marca}
                                         </span>
                                       </li>
                                       <li>
@@ -749,14 +720,17 @@ const Vehiculo = () => {
                                       <li>
                                         <strong>Combustible: </strong>
                                         <span className="titulo-titulo">
-                                          {vehiculo.combustible}
+                                          {
+                                            vehiculo.tipocombustible
+                                              .tipocombustible
+                                          }
                                         </span>
                                       </li>
                                       <li>
                                         <strong>Manejo: </strong>
 
                                         <span className="titulo-titulo">
-                                          {vehiculo.manejo}
+                                          {vehiculo.tipomanejo.tipomanejo}
                                         </span>
                                       </li>
                                       <li>
@@ -792,7 +766,7 @@ const Vehiculo = () => {
                                 <br></br>
                                 {success ? (
                                   <>
-                                    <section>
+                                    <section className="section">
                                       <h1 className="titulo-titulo">
                                         ¡Pago exitoso!
                                       </h1>
@@ -847,7 +821,7 @@ const Vehiculo = () => {
                   <Modal.Footer>
                     <Button
                       variant="secondary"
-                      onClick={() => setTerminosycondiciones(false)}
+                      onClick={() => setPaypal(false)}
                     >
                       Cerrar
                     </Button>

@@ -1,7 +1,7 @@
 import React from "react";
-import Carousel from "./Carousel";
-import Nuestrasmarcas from "./Nuestrasmarcas";
-import Quienessomos from "./Quienessomos";
+import Carousel from "../components/Carousel";
+import Nuestrasmarcas from "../components/Nuestrasmarcas";
+import Quienessomos from "../components/Quienessomos";
 
 const Inicio = () => {
   return (
