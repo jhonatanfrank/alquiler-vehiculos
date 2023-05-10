@@ -78,8 +78,9 @@ const Vehiculodetails = (props) => {
                 </div>
               </div>
               <div className="row">
-                <div className="col-12">
-                  <h2>Precio: S/.{props.precio} x día </h2>
+              <div className="col-12">
+                  <h3>Precio por día</h3>
+                  <p className="titulo-titulo">${props.precio}</p>
                 </div>
               </div>
               <hr></hr>

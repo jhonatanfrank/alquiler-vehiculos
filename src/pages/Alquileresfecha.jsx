@@ -13,7 +13,7 @@ const Alquileresfecha = (props) => {
         }
         const alquileres = await response.json();
         setAlquileres(alquileres);
-        console.log(alquileres);
+        //console.log(alquileres);
       } catch (error) {
         console.log(error);
       }
@@ -65,9 +65,13 @@ const Alquileresfecha = (props) => {
                   <tbody>
                     {alquileres.map((alquiler, index) => (
                       <tr key={alquiler.id}>
-                        <td>{index + 1}</td>
-                        <td>{alquiler.fechainicio.substring(0, 10)}</td>
-                        <td>{alquiler.fechafin.substring(0, 10)}</td>
+                        <td className="titulo-titulo">{index + 1}</td>
+                        <td className="titulo-titulo">
+                          {alquiler.fechainicio.substring(0, 10)}
+                        </td>
+                        <td className="titulo-titulo">
+                          {alquiler.fechafin.substring(0, 10)}
+                        </td>
                         {/* Agrega aquí cualquier otro atributo que quieras mostrar */}
                       </tr>
                     ))}

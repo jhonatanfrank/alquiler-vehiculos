@@ -66,16 +66,18 @@ const Vehiculo = () => {
       .then(setEstadoalquileres(true))
       .catch((error) => console.log(error));
   }, [placa]);
-  
-  console.log(placa);
+
   const blockedDates = dates
     .map((date) => {
       const startDate = new Date(date.fechainicio);
       const endDate = new Date(date.fechafin);
+      const oneDay = 24 * 60 * 60 * 1000; // milisegundos en un día
+      const endDateOne = new Date(endDate.getTime() + oneDay);
+      const startDateOne = new Date(startDate.getTime() - oneDay);
       const datesArray = [];
       for (
-        let date = startDate;
-        date <= endDate;
+        let date = startDateOne;
+        date <= endDateOne;
         date.setDate(date.getDate() + 1)
       ) {
         datesArray.push(new Date(date));
@@ -131,7 +133,15 @@ const Vehiculo = () => {
 
   /* Modal de Paypal */
   const modalPaypal = () => {
-    setPaypal(true);
+    const form = document.getElementById("miFormulario");
+
+    if (!form.checkValidity() || !estadofechas) {
+      // si el formulario es inválido, mostrar un mensaje de error o hacer algo aquí
+      alert("Por favor llena todos los campos y selecciona un rango de fechas");
+    } else {
+      // si el formulario es válido, hacer algo aquí
+      setPaypal(true);
+    }
   };
 
   /*Check */
@@ -386,7 +396,6 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
     <>
       {vehiculo ? (
         <>
-          {placa}
           <div className="container-fluid p-5 bg-dark text-white text-center">
             <h1>!Resérvalo aquí!</h1>
             <p>
@@ -486,17 +495,19 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
             <div className="contenedor-hijo-adicional">
               <div className="container">
                 <h4>Complete los datos:</h4>
-                <form>
+                <form id="miFormulario">
                   <div className="row">
                     <div className="col-md-4">
-                      <label>Nombre:</label>
+                      <label>Nombres:</label>
                       <input
+                        id="nombres"
                         type="text"
-                        name="nombre"
+                        name="nombres"
                         className="form-control col-12"
                         value={nombres}
                         placeholder="Ingrese sus nombres"
                         onChange={obtenerNombres}
+                        required
                       />
                     </div>
                     <div className="col-md-4">
@@ -508,6 +519,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={apellidos}
                         placeholder="Ingrese sus apellidos"
                         onChange={obtenerApellidos}
+                        required
                       />
                     </div>
                     <div className="col-md-4">
@@ -519,6 +531,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={email}
                         placeholder="Ingrese su Correo Electrónico"
                         onChange={obtenerEmail}
+                        required
                       />
                     </div>
                     <div className="col-md-2">
@@ -530,6 +543,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={pais}
                         placeholder="Ingrese su país"
                         onChange={obtenerPais}
+                        required
                       />
                     </div>
                     <div className="col-md-3">
@@ -541,6 +555,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={distrito}
                         placeholder="Ingrese su distrito"
                         onChange={obtenerDistrito}
+                        required
                       />
                     </div>
                     <div className="col-md-7">
@@ -552,6 +567,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={direccion}
                         placeholder="Ingrese su dirección"
                         onChange={obtenerDireccion}
+                        required
                       />
                     </div>
                     <div className="col-md-3">
@@ -563,6 +579,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={telefono1}
                         placeholder="Ingrese su telefono"
                         onChange={obtenerTelefono1}
+                        required
                       />
                     </div>
                     <div className="col-md-3">
@@ -574,6 +591,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         placeholder="Ingrese un número alternativo"
                         value={telefono2}
                         onChange={obtenerTelefono2}
+                        required
                       />
                     </div>
 
@@ -586,6 +604,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={lugarrecojo}
                         placeholder="Ingrese en donde va recoger el carro"
                         onChange={obtenerLugarRecojo}
+                        required
                       />
                     </div>
                     <div className="col-md-3">
@@ -610,21 +629,23 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                       onChange={manejarCambioCheck}
                     />
                     <label>
-                      Acepto los
+                      Acepto que he leído los
                       <strong onClick={modalTerminosCondiciones}>
                         &nbsp;Términos y Condiciones
                       </strong>
                     </label>
                   </div>
+                  <div>
+                    <button
+                      type="button"
+                      disabled={!checkActivo}
+                      className="btn btn-dark"
+                      onClick={modalPaypal}
+                    >
+                      Siguiente
+                    </button>
+                  </div>
                 </form>
-
-                <button
-                  disabled={!checkActivo}
-                  className="btn btn-dark"
-                  onClick={modalPaypal}
-                >
-                  Siguiente
-                </button>
 
                 <Modal
                   size="xl"
@@ -642,62 +663,33 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                     </h3>
                     <ol>
                       <li>
-                        Si desea realizar alguna cancelación, cambio de horario,
-                        vehiculo u otro, debe acercarse personalmente a las
-                        oficinas de Rent Car´s ubicada en Av. Cesar Vallejo
-                        cruce con Av. Jorge Chavez, cuadra 50.
+                        El arrendador se compromete a entregar el vehículo en
+                        buen estado y en condiciones de ser utilizado de manera
+                        segura durante el período de alquiler.
                       </li>
                       <li>
-                        Al momento de usted recibir el vehiculo solicitado, debe
-                        de firmar las hojas que le entregará nuestro personal de
-                        flota, en el cual está detallada como se le está dejando
-                        el vehiculo, tanto al interior, como al exterior,
-                        herramientas, accesorios, funcionalidades, etc.
+                        El arrendatario acepta que cualquier daño causado al
+                        vehículo durante el período de alquiler será su
+                        responsabilidad y que se le cobrará el costo total de
+                        las reparaciones necesarias. El arrendatario también se
+                        compromete a cumplir con todas las leyes y regulaciones
+                        de tráfico aplicables durante el período de alquiler.
                       </li>
                       <li>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Quis maxime dolore labore, earum nisi nesciunt corporis
-                        minima illo nam dolores, impedit molestias culpa
-                        eveniet, inventore quas repudiandae necessitatibus!
-                        Unde, ipsam. Lorem ipsum, dolor sit amet consectetur
-                        adipisicing elit. Explicabo possimus labore esse quas
-                        recusandae quaerat itaque a, repellendus inventore
-                        soluta cumque numquam id commodi, minima praesentium
-                        corporis debitis ipsam dolor. Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Doloremque ducimus aliquam
-                        laudantium totam laborum ut saepe, asperiores, nesciunt
-                        quasi consectetur non repudiandae accusamus. Dolorem,
-                        omnis quisquam! Itaque asperiores nesciunt libero.
+                        El arrendatario acepta que el vehículo es propiedad
+                        exclusiva del arrendador y que no tiene derecho a
+                        vender, transferir, hipotecar o gravar el vehículo de
+                        ninguna manera durante el período de alquiler.
                       </li>
                       <li>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing
-                        elit. Tempora ab hic error cupiditate sit in sequi at
-                        unde a dolorem aut, perferendis ut non molestiae nemo
-                        inventore asperiores. Voluptatum, sit! Lorem ipsum dolor
-                        sit amet consectetur adipisicing elit. Non, quam
-                        pariatur possimus architecto hic tempora nam eaque
-                        veritatis, earum quas commodi dolores illum ratione
-                        exercitationem nesciunt unde quia ducimus iure! Lorem
-                        ipsum dolor sit amet consectetur, adipisicing elit.
-                        Molestiae soluta similique, iure temporibus excepturi
-                        dicta aliquam voluptatum explicabo voluptas provident
-                        adipisci ex quasi eaque inventore! Eius nemo beatae
-                        necessitatibus explicabo!
+                        El arrendador no será responsable por ningún daño o
+                        pérdida de propiedad personal del arrendatario que
+                        ocurra durante el período de alquiler.
                       </li>
                       <li>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. Dicta quisquam, fugit, architecto non quasi
-                        reprehenderit pariatur ab, ipsa sunt numquam cumque.
-                        Fuga in animi facilis officiis inventore. Explicabo,
-                        consectetur exercitationem. Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Commodi hic soluta itaque
-                        magni id, architecto quam blanditiis in labore
-                        excepturi, doloremque inventore laborum! Commodi, cumque
-                        animi? Dolorem, assumenda fugiat? Nobis! Lorem ipsum
-                        dolor sit amet consectetur adipisicing elit. Blanditiis
-                        illum dolorum, aliquam quam possimus amet at qui odit a
-                        quia sapiente sunt maxime mollitia quos delectus sed,
-                        eligendi quod autem.
+                        Al aceptar estos términos y condiciones, el arrendatario
+                        acepta cumplir con todas las obligaciones y
+                        responsabilidades establecidas en este contrato.
                       </li>
                     </ol>
                   </Modal.Body>
@@ -733,8 +725,6 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                             <div>
                               {!success ? (
                                 <>
-                                  <Alquileresfecha placa={vehiculo.asiento} />
-
                                   <div className="row">
                                     <div className="col col-md-6">
                                       <ul>
@@ -869,8 +859,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                                       <br />
                                       <h1>
                                         <strong>
-                                          PRECIO FINAL: S/.
-                                          {precioFinal}
+                                          PRECIO FINAL: ${precioFinal}
                                         </strong>
                                       </h1>
                                     </div>
