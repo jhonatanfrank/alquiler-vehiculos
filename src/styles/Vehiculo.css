@@ -10,6 +10,32 @@
   color: red;
 }
 
-.contenedor-fechas{
-  margin-top: 70px;
+.contenedor-resumen {
+  width: 100%;
+  max-width: 700px;
+  min-width: 300px;
+
+  padding: 0px 20px 0px 20px;
+}
+
+.contenedor-precio-vehiculo-resumen {
+  background-color: #0000ff;
+  width: auto;
+  height: auto;
+  border-radius: 5px;
+  padding: 0px 15px 0px 15px;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin-bottom: 10px;
+}
+.titulo-precio-vehiculo-resumen {
+  color: white;
+  font-size: 20px;
+}
+
+.contenedor-padre-precio-vehiculo-resumen {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
 }

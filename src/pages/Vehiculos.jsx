@@ -21,7 +21,7 @@ const Vehiculos = () => {
         setVehiculos(data);
         setTimeout(() => {
           setCargando(false);
-        },1000);
+        }, 1000);
       } catch (error) {
         console.log(error);
       }
@@ -67,25 +67,26 @@ const Vehiculos = () => {
                     <div key={index}>
                       <>
                         <div className="contenedor-hijo-vehiculos contenedor-box-shadow">
-                          <div className="precio">
-                            <span className="precio-titulo">
-                              <strong>Desde: S/{vehiculo.precio}.00</strong>
-                            </span>
-                            <span className="sub-precio-titulo">/día</span>
-                          </div>
                           <div className="imagen-caja">
                             <img
-                            className="foto-vehiculos"
+                              className="foto-vehiculos"
                               src={vehiculo.foto}
                               alt={vehiculo.marca.marca}
                             />
                           </div>
+                          <div className="contenedor-padre-precio">
+                            <div className="contenedor-precio">
+                              <strong className="titulo-precio">
+                                ${vehiculo.precio}
+                              </strong>
+                            </div>
+                          </div>
                           <h5 className="text-center marca-text">
-                            <strong>{vehiculo.marca.marca}</strong>
+                            <strong className="titulo-titulo">{vehiculo.marca.marca}</strong>
                           </h5>
                           <h3 className="text-center">
                             <strong>{vehiculo.placa}</strong>
-                          </h3>                      
+                          </h3>
                           <div className="boton-mas-detalles">
                             <Link to={`/vehiculos/${vehiculo.id}`}>
                               <button className="btn btn-dark col-12 btn-sm p-2">

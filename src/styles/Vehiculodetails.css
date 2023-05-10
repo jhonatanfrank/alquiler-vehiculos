@@ -1,3 +1,30 @@
 .contenedor-details {
   margin-top: 30px;
 }
+
+.contenedor-details-details{
+  padding: 20px;
+}
+
+.contenedor-precio-vehiculo {
+  background-color: #0000ff;
+  width: auto;
+  height: 50px;
+  border-radius: 5px;
+  padding: 0px 15px 0px 15px;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  margin-bottom: 10px;
+}
+.titulo-precio-vehiculo {
+  color: white;
+  font-size: 30px;
+}
+
+.contenedor-padre-precio-vehiculo {
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+}
+

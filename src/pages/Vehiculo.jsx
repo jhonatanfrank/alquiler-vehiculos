@@ -15,6 +15,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { parseISO } from "date-fns/esm";
 /*FIN CALENDARIO */
 
 const Vehiculo = () => {
@@ -88,10 +89,6 @@ const Vehiculo = () => {
 
   const allBlockedDates = [...blockedDates];
 
-  const styles = {
-    color: "#f00",
-    backgroundColor: "#fff",
-  };
   /*CALENDARIO FIN*/
 
   /* PAYPAL INICIO */
@@ -448,7 +445,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                     ranges={dateRange}
                     onChange={handleSelect}
                     disabledDates={allBlockedDates}
-                    styles={styles}
+                    showDateDisplay={true}
                   />
                   <div>
                     <button
@@ -462,15 +459,15 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
 
                   {estadofechas ? (
                     <>
-                      <div>
+                      <div className="titulo-titulo">
                         <strong>Fecha inicio seleccionada:</strong>{" "}
                         {new Date(finicio).toISOString().substring(0, 10)}
                       </div>
-                      <div>
+                      <div className="titulo-titulo">
                         <strong>Fecha fin seleccionada:</strong>{" "}
                         {new Date(ffin).toISOString().substring(0, 10)}
                       </div>
-                      <div>
+                      <div className="titulo-titulo">
                         <strong>Dias de alquiler:</strong> {diferencia1}
                       </div>
                     </>
@@ -703,7 +700,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                   </Modal.Footer>
                 </Modal>
 
-                <Modal size="xl" show={paypal} onHide={() => setPaypal(false)}>
+                <Modal size="lg" show={paypal} onHide={() => setPaypal(false)}>
                   <Modal.Header closeButton>
                     <Modal.Title>
                       {!success ? (
@@ -725,143 +722,146 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                             <div>
                               {!success ? (
                                 <>
-                                  <div className="row">
-                                    <div className="col col-md-6">
-                                      <ul>
-                                        <li>
-                                          <strong>Nombres: </strong>
-                                          <span className="titulo-titulo">
-                                            {nombres}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Apellidos: </strong>
-                                          <span className="titulo-titulo">
-                                            {apellidos}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Pais: </strong>
-                                          <span className="titulo-titulo">
-                                            {pais}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Distrito: </strong>
-                                          <span className="titulo-titulo">
-                                            {distrito}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Correo electronico: </strong>
-                                          <span className="titulo-titulo">
-                                            {email}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Direccion: </strong>
-                                          <span className="titulo-titulo">
-                                            {direccion}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Telefono: </strong>
-                                          <span className="titulo-titulo">
-                                            {telefono1}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Telefono alternativo:</strong>
-                                          <span className="titulo-titulo">
-                                            {telefono2}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Fecha inicio: </strong>
-                                          <span className="titulo-titulo">
-                                            {finicio}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Fecha fin: </strong>
-                                          <span className="titulo-titulo">
-                                            {ffin}
-                                          </span>
-                                        </li>
-                                        <li>
-                                          <strong>Dias de alquiler: </strong>
-                                          <span className="titulo-titulo">
-                                            {diferencia1}
-                                          </span>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                    <div className="col col-md-6">
-                                      <li>
-                                        <strong>Placa: </strong>
-                                        <span className="titulo-titulo">
+                                  <div className="row d-flex justify-content-center align-items-center">
+                                    <div className="container contenedor-resumen">
+                                      <div className="row">
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Nombres</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {nombres}
+                                        </div>
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Apellidos</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {apellidos}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Correo electrónico</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {email}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>País</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {pais}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Distrito</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {distrito}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Dirección</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {direccion}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Telefono</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {telefono1}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Telefono alternativo</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {telefono2}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Fecha inicio</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {finicio}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Fecha fin</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {ffin}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Días alquiler</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {diferencia1}
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Placa</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.placa}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Asientos: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Asientos</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.asientos}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Marca: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Marca</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.marca.marca}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Modelo: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Modelo</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.modelo}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Año: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Año</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.anio}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Combustible: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Tipo de combustible</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {
                                             vehiculo.tipocombustible
                                               .tipocombustible
                                           }
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Manejo: </strong>
-
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Tipo de manejo</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {vehiculo.tipomanejo.tipomanejo}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Lugar de devolucion: </strong>
-
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Lugar de recojo</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {lugarrecojo}
-                                        </span>
-                                      </li>
-                                      <li>
-                                        <strong>Lugar de devolucion: </strong>
-                                        <span className="titulo-titulo">
+                                        </div>{" "}
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Lugar de devolución</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {lugardevolucion}
-                                        </span>
-                                      </li>
-                                      <br />
-                                      <h1>
-                                        <strong>
-                                          PRECIO FINAL: ${precioFinal}
-                                        </strong>
-                                      </h1>
+                                        </div>
+                                        <hr />
+                                        <div className="col-md-6 col-sm-6">
+                                          <strong>Total a pagar:</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-6 col-sm-6 d-flex justify-content-end">
+                                          <div className="contenedor-padre-precio-vehiculo-resumen">
+                                            <div className="contenedor-precio-vehiculo-resumen">
+                                              <strong className="titulo-precio-vehiculo-resumen">
+                                                ${precioFinal}
+                                              </strong>
+                                            </div>
+                                          </div>
+                                        </div>{" "}
+                                      </div>
                                     </div>
                                   </div>
                                 </>
@@ -901,13 +901,17 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                                     </section>
                                   </>
                                 ) : (
-                                  <button
-                                    className="buy-btn btn btn-dark"
-                                    type="submit"
-                                    onClick={() => setShow(true)}
-                                  >
-                                    ¡Cancelar ahora!
-                                  </button>
+                                  <>
+                                    <div className="container d-flex justify-content-center align-items-center">
+                                      <button
+                                        className="buy-btn btn btn-dark col-6"
+                                        type="submit"
+                                        onClick={() => setShow(true)}
+                                      >
+                                        ¡Cancelar ahora!
+                                      </button>
+                                    </div>
+                                  </>
                                 )}
                               </div>
                             </div>
