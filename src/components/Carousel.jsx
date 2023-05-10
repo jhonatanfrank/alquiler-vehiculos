@@ -14,7 +14,7 @@ const Carousel = () => {
           </div>
           <div className="carousel-item">
             <img
-              src="./images/auto3.jpg"
+              src="./images/auto2.jpg"
               className="d-block w-100"
               alt="auto2"
             />

@@ -75,18 +75,18 @@ const Vehiculos = () => {
                           </div>
                           <div className="imagen-caja">
                             <img
+                            className="foto-vehiculos"
                               src={vehiculo.foto}
                               alt={vehiculo.marca.marca}
                             />
                           </div>
-                          <h5 className="text-center">
+                          <h5 className="text-center marca-text">
                             <strong>{vehiculo.marca.marca}</strong>
                           </h5>
                           <h3 className="text-center">
                             <strong>{vehiculo.placa}</strong>
-                          </h3>
-                          <br />
-                          <div>
+                          </h3>                      
+                          <div className="boton-mas-detalles">
                             <Link to={`/vehiculos/${vehiculo.id}`}>
                               <button className="btn btn-dark col-12 btn-sm p-2">
                                 Más detalles

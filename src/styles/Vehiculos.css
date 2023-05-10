@@ -8,9 +8,9 @@
 }
 
 .contenedor-hijo-vehiculos {
-  width: 310px;
+  width: auto;
   height: auto;
-  padding: 30px;
+  background-color: white;
 }
 
 .precio-titulo {
@@ -23,12 +23,22 @@
 
 .precio {
   text-align: right;
+  padding: 10px;
 }
 
 .imagen-caja {
   /*background-color: hsl(223deg 14% 20%);*/
-  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.boton-mas-detalles {
+  padding: 15px;
+}
+.marca-text {
+  padding-top: 15px;
+}
+.foto-vehiculos {
+  width: 300px;
 }

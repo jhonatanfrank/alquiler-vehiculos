@@ -7,15 +7,91 @@ import Alquileresfecha from "./Alquileresfecha";
 
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import moment from "moment/moment";
 import jsPDF from "jspdf";
 import "../styles/Vehiculo.css";
-
-/* PAYPAL */
 import { CLIENT_ID } from "../config/config.js";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+/*INICIO CALENDARIO */
+import { DateRange } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+/*FIN CALENDARIO */
 
 const Vehiculo = () => {
+  /* CALENDARIO INICIO */
+  const [dates, setDates] = useState([]);
+  const [diferencia1, setDiferencia1] = useState(0);
+  const [finicio, setFinicio] = useState("");
+  const [ffin, setFfin] = useState("");
+  const [estadofechas, setEstadofechas] = useState(false);
+  const [estadoalquileres, setEstadoalquileres] = useState(false);
+  const [placa, setPlaca] = useState(true);
+
+  /* calendario */
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+
+  const handleSelect = (ranges) => {
+    setDateRange([ranges.selection]);
+  };
+
+  const handleSave = () => {
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
+    const startISOString = startDate.toISOString().slice(0, 19);
+    const endISOString = endDate.toISOString().slice(0, 19);
+    const range = `${startISOString} - ${endISOString}`;
+    const duration =
+      Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    setDiferencia1(duration);
+    setEstadofechas(true);
+    setRangeText(`${range} (${duration} días)`);
+    setFinicio(startISOString);
+    setFfin(endISOString);
+  };
+
+  const [rangeText, setRangeText] = useState("");
+
+  useEffect(() => {
+    fetch(
+      `http://localhost:8080/alquilervehiculos/api/alquileres/vehiculo/${placa}`
+    )
+      .then((response) => response.json())
+      .then((data) => setDates(data))
+      .then(setEstadoalquileres(true))
+      .catch((error) => console.log(error));
+  }, [placa]);
+  
+  console.log(placa);
+  const blockedDates = dates
+    .map((date) => {
+      const startDate = new Date(date.fechainicio);
+      const endDate = new Date(date.fechafin);
+      const datesArray = [];
+      for (
+        let date = startDate;
+        date <= endDate;
+        date.setDate(date.getDate() + 1)
+      ) {
+        datesArray.push(new Date(date));
+      }
+      return datesArray;
+    })
+    .flat();
+
+  const allBlockedDates = [...blockedDates];
+
+  const styles = {
+    color: "#f00",
+    backgroundColor: "#fff",
+  };
+  /*CALENDARIO FIN*/
+
   /* PAYPAL INICIO */
   const [show, setShow] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -47,7 +123,6 @@ const Vehiculo = () => {
   const [codigo, setCodigo] = useState("");
   const [alquiler, setAlquiler] = useState({});
   const [cargando, setCargando] = useState(true);
-  const [placa, setPlaca] = useState(true);
 
   /* Modal de Terminos y condiciones */
   const modalTerminosCondiciones = () => {
@@ -58,9 +133,6 @@ const Vehiculo = () => {
   const modalPaypal = () => {
     setPaypal(true);
   };
-
-  /* Modal de Resumen */
-  const modalResumenPago = (event) => {};
 
   /*Check */
   const manejarCambioCheck = (evento) => {
@@ -101,8 +173,8 @@ const Vehiculo = () => {
         "http://localhost:8080/alquilervehiculos/api/alquileres";
       const vehiculoUrl = `http://localhost:8080/alquilervehiculos/api/vehiculos/${vehiculo.id}`;
 
-      const fecha1_c = new Date(fecha1);
-      const fecha2_c = new Date(fecha2);
+      const fecha1_c = new Date(finicio);
+      const fecha2_c = new Date(ffin);
 
       const alquilerData = {
         nombres: nombres,
@@ -201,13 +273,6 @@ const Vehiculo = () => {
   };
 
   useEffect(() => {
-    if (fecha1 && fecha2) {
-      const diff = moment(fecha2).diff(moment(fecha1), "days");
-      setDiferencia(diff);
-    }
-  }, [fecha1, fecha2]);
-
-  useEffect(() => {
     const nuevoCodigo = Math.floor(Math.random() * 100000000).toString();
     setCodigo(nuevoCodigo);
   }, []);
@@ -237,8 +302,8 @@ const Vehiculo = () => {
     Tipo de manejo: ${vehiculo.tipomanejo.tipomanejo}
 
     FECHAS DEL ALQUILER:
-    Fecha inicio: ${fecha1}
-    Fecha fin: ${fecha2}
+    Fecha inicio: ${finicio}
+    Fecha fin: ${ffin}
 
     LUGAR DE ROCOJO Y DEVOLUCION:
     Lugar recojo: ${lugarrecojo}
@@ -249,12 +314,11 @@ const Vehiculo = () => {
   };
 
   /* PAYPAL INICIO */
-
   useEffect(() => {
-    const paypal_precioFinal = precioVehiculo * diferencia;
+    const paypal_precioFinal = precioVehiculo * diferencia1;
     console.log(paypal_precioFinal);
     setPrecioFinal(paypal_precioFinal);
-  }, [precioVehiculo, diferencia]);
+  }, [precioVehiculo, diferencia1]);
 
   // creates a paypal order
   const createOrder = (data, actions) => {
@@ -312,10 +376,17 @@ const Vehiculo = () => {
     return `${hours}${minutes}${seconds}`;
   };
 */
+
+  /*
+const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
+*/
+
   return (
     <>
       {vehiculo ? (
         <>
+          {placa}
           <div className="container-fluid p-5 bg-dark text-white text-center">
             <h1>!Resérvalo aquí!</h1>
             <p>
@@ -337,8 +408,79 @@ const Vehiculo = () => {
             tapizadoasientos={vehiculo.tapizadoasientos.tapizadoasientos}
             vehiculo={vehiculo}
           />
+
           <Consejos />
-          <Alquileresfecha placa={vehiculo.placa} />
+
+          <div className="container contenedor-fechas">
+            <div className="row">
+              <div className="col-12">
+                <section>
+                  <h3>
+                    ¡Elije las fechas que deseas alquilar tu vehiculo aquí!
+                  </h3>
+                  <div>
+                    <strong>
+                      <span className="alert-aviso">
+                        *Si las fechas en el calendario te salen de color plomo
+                        y no las puedes seleccionar, es por que esas fechas el
+                        vehículo ya está en reserva*
+                      </span>
+                    </strong>
+                  </div>
+                </section>
+              </div>
+
+              <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                <Alquileresfecha placa={vehiculo.placa} />
+              </div>
+              <div className="col-md-6 col-sm-12">
+                <section>
+                  <DateRange
+                    ranges={dateRange}
+                    onChange={handleSelect}
+                    disabledDates={allBlockedDates}
+                    styles={styles}
+                  />
+                  <div>
+                    <button
+                      onClick={handleSave}
+                      className="save-button btn btn-dark col-6"
+                    >
+                      Guardar
+                    </button>
+                  </div>
+                  <hr />
+
+                  {estadofechas ? (
+                    <>
+                      <div>
+                        <strong>Fecha inicio seleccionada:</strong>{" "}
+                        {new Date(finicio).toISOString().substring(0, 10)}
+                      </div>
+                      <div>
+                        <strong>Fecha fin seleccionada:</strong>{" "}
+                        {new Date(ffin).toISOString().substring(0, 10)}
+                      </div>
+                      <div>
+                        <strong>Dias de alquiler:</strong> {diferencia1}
+                      </div>
+                    </>
+                  ) : (
+                    <div>
+                      <strong>
+                        <span className="alert-aviso">
+                          *Selecciona mediante el calendario el rango de fechas
+                          en el que deseas alquilar nuestro vehículo.*
+                        </span>
+                      </strong>
+                    </div>
+                  )}
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <></>
 
           <div className="contenedor-formulario contenedor-box-shadow mx-auto">
             <div className="contenedor-hijo-adicional">
@@ -436,28 +578,6 @@ const Vehiculo = () => {
                     </div>
 
                     <div className="col-md-3">
-                      <label htmlFor="name">Fecha inicio:</label>
-                      <input
-                        id="fecha1"
-                        type="date"
-                        name="fechainicio"
-                        className="form-control"
-                        value={fecha1}
-                        onChange={(e) => setFecha1(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Fecha fin:</label>
-                      <input
-                        id="fecha2"
-                        type="date"
-                        name="fechafin"
-                        className="form-control"
-                        value={fecha2}
-                        onChange={(e) => setFecha2(e.target.value)}
-                      />
-                    </div>
-                    <div className="col-md-6">
                       <label htmlFor="name">Lugar recojo:</label>
                       <input
                         type="text"
@@ -468,7 +588,7 @@ const Vehiculo = () => {
                         onChange={obtenerLugarRecojo}
                       />
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-3">
                       <label htmlFor="name">Lugar devolucion:</label>
                       <input
                         type="text"
@@ -669,19 +789,19 @@ const Vehiculo = () => {
                                         <li>
                                           <strong>Fecha inicio: </strong>
                                           <span className="titulo-titulo">
-                                            {fecha1}
+                                            {finicio}
                                           </span>
                                         </li>
                                         <li>
                                           <strong>Fecha fin: </strong>
                                           <span className="titulo-titulo">
-                                            {fecha2}
+                                            {ffin}
                                           </span>
                                         </li>
                                         <li>
                                           <strong>Dias de alquiler: </strong>
                                           <span className="titulo-titulo">
-                                            {diferencia}
+                                            {diferencia1}
                                           </span>
                                         </li>
                                       </ul>

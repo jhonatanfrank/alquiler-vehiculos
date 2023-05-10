@@ -5,3 +5,11 @@
 .section {
   border: 0px;
 }
+
+.alert-aviso {
+  color: red;
+}
+
+.contenedor-fechas{
+  margin-top: 70px;
+}
