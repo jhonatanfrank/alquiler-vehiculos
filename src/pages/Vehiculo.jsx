@@ -86,8 +86,18 @@ const Vehiculo = () => {
       return datesArray;
     })
     .flat();
-
   const allBlockedDates = [...blockedDates];
+
+  function dayContentRenderer(day) {
+    const isBlocked = blockedDates.some((blockedDate) => {
+      return blockedDate.toDateString() === day.toDateString();
+    });
+    return (
+      <div className={`rdr-Day ${isBlocked ? "is-disabled" : ""}`}>
+        {day.getDate()}
+      </div>
+    );
+  }
 
   /*CALENDARIO FIN*/
 
@@ -120,6 +130,7 @@ const Vehiculo = () => {
   const [fecha2, setFecha2] = useState("");
   const [diferencia, setDiferencia] = useState(0);
   const [codigo, setCodigo] = useState("");
+  const [codigoNuevo, setCodigoNuevo] = useState("");
   const [alquiler, setAlquiler] = useState({});
   const [cargando, setCargando] = useState(true);
 
@@ -234,7 +245,6 @@ const Vehiculo = () => {
     if (success) {
       submitData();
       exportarPDF();
-      console.log("Se guardó en la base de datos y se exportó PDF");
     }
   }, [success]);
 
@@ -287,7 +297,7 @@ const Vehiculo = () => {
   const exportarPDF = () => {
     const doc = new jsPDF();
     const texto = `
-    CÓDIGO DEL ALQUILER: ${codigo}
+    CÓDIGO DEL ALQUILER: ${codigoNuevo}
 
     DATOS DEL ARRENDATARIO:
     <h2>Nombre: ${nombres}</h2>
@@ -383,7 +393,7 @@ const Vehiculo = () => {
     return `${hours}${minutes}${seconds}`;
   };
 */
-
+  /* puede ser por que no usaste el use effect al momento de sacar como parametro, asi como te sucedio con placa vehiculo */
   /*
 const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
 const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
@@ -427,7 +437,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                   <div>
                     <strong>
                       <span className="alert-aviso">
-                        *Si las fechas en el calendario te salen de color plomo
+                        *Si las fechas en el calendario te salen de color morado
                         y no las puedes seleccionar, es por que esas fechas el
                         vehículo ya está en reserva*
                       </span>
@@ -446,6 +456,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                     onChange={handleSelect}
                     disabledDates={allBlockedDates}
                     showDateDisplay={true}
+                    dayContentRenderer={dayContentRenderer}
                   />
                   <div>
                     <button

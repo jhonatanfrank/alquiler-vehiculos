@@ -83,7 +83,7 @@ const Vehiculodetails = (props) => {
                 <div className="contenedor-padre-precio-vehiculo">
                   <div className="contenedor-precio-vehiculo">
                     <strong className="titulo-precio-vehiculo">
-                      Precio: ${props.precio}
+                      Precio al día: ${props.precio}
                     </strong>
                   </div>
                 </div>

@@ -7,7 +7,7 @@
 }
 
 .alert-aviso {
-  color: red;
+  color: rgb(255, 80, 80);
 }
 
 .contenedor-resumen {
@@ -19,7 +19,7 @@
 }
 
 .contenedor-precio-vehiculo-resumen {
-  background-color: #0000ff;
+  background-color: #6528e0;
   width: auto;
   height: auto;
   border-radius: 5px;
@@ -29,6 +29,7 @@
   justify-items: center;
   margin-bottom: 10px;
 }
+
 .titulo-precio-vehiculo-resumen {
   color: white;
   font-size: 20px;
@@ -38,4 +39,17 @@
   display: flex;
   justify-content: center;
   justify-items: center;
+}
+
+
+.rdrDay.rdrDayDisabled {
+  background-color: #6528e0;
+  border-radius: 100%;
+}
+
+.rdr-Day.is-disabled {
+  color: white;
+}
+.rdr-Day.is-selected {
+  border-bottom: 2px solid blue;
 }
