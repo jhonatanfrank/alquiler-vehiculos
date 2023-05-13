@@ -24,7 +24,7 @@ const Login = () => {
 
                   <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="typePasswordX-2">
-                    <strong>Contraseña</strong>
+                      <strong>Contraseña</strong>
                     </label>
                     <input
                       type="password"
@@ -32,14 +32,12 @@ const Login = () => {
                       className="form-control form-control-md"
                     />
                   </div>
-
                   <button
                     className="btn btn-primary btn-lg btn-block btn-dark btn-sm p-2"
                     type="submit"
                   >
                     Login
                   </button>
-
                   <hr className="my-4" />
                   <div>
                     <p className="parrafo">¿No tienes una cuenta? </p>

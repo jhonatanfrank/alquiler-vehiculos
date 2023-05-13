@@ -10,12 +10,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import jsPDF from "jspdf";
 import "../styles/Vehiculo.css";
 import { CLIENT_ID } from "../config/config.js";
+import Swal from "sweetalert2";
+
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 /*INICIO CALENDARIO */
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { parseISO } from "date-fns/esm";
 /*FIN CALENDARIO */
 
 const Vehiculo = () => {
@@ -98,7 +99,6 @@ const Vehiculo = () => {
       </div>
     );
   }
-
   /*CALENDARIO FIN*/
 
   /* PAYPAL INICIO */
@@ -115,14 +115,17 @@ const Vehiculo = () => {
   const [paypal, setPaypal] = useState(false);
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
+  const [dni, setDni] = useState("");
   const [email, setEmail] = useState("");
   const [pais, setPais] = useState("");
+  const [departamento, setDepartamento] = useState("");
   const [direccion, setDireccion] = useState("");
   const [distrito, setDistrito] = useState("");
   const [telefono1, setTelefono1] = useState("");
   const [telefono2, setTelefono2] = useState("");
   const [lugarrecojo, setLugarRecojo] = useState("");
   const [lugardevolucion, setLugarDevolucion] = useState("");
+  const [comentarios, setComentarios] = useState("");
   const [vehiculo, setVehiculo] = useState(null);
   const [precioFinal, setPrecioFinal] = useState(0);
   const [precioVehiculo, setPrecioVehiculo] = useState(0);
@@ -145,7 +148,11 @@ const Vehiculo = () => {
 
     if (!form.checkValidity() || !estadofechas) {
       // si el formulario es inválido, mostrar un mensaje de error o hacer algo aquí
-      alert("Por favor llena todos los campos y selecciona un rango de fechas");
+      Swal.fire({
+        icon: "error",
+        title: "Vaya...",
+        text: "Tienes que escoger un rango de fechas y completar todos los datos en el formulario",
+      });
     } else {
       // si el formulario es válido, hacer algo aquí
       setPaypal(true);
@@ -197,17 +204,21 @@ const Vehiculo = () => {
       const alquilerData = {
         nombres: nombres,
         apellidos: apellidos,
+        dni: dni,
         email: email,
         pais: pais,
+        departamento: departamento,
         direccion: direccion,
         distrito: distrito,
         telefono1: telefono1,
         telefono2: telefono2,
         lugarrecojo: lugarrecojo,
         lugardevolucion: lugardevolucion,
+        comentarios: comentarios,
         preciofinal: precioFinal,
         fechainicio: fecha1_c,
         fechafin: fecha2_c,
+        diasalquiler: diferencia1,
         vehiculo: {
           id: vehiculo.id,
         },
@@ -227,7 +238,6 @@ const Vehiculo = () => {
 
       const alquilerResponseData = await alquilerResponse.json();
       console.log(alquilerResponseData);
-
       /*
       const vehiculoResponse = await fetch(vehiculoUrl, {
         method: "PATCH",
@@ -257,12 +267,20 @@ const Vehiculo = () => {
     setApellidos(event.target.value);
   };
 
+  const obtenerDni = (event) => {
+    setDni(event.target.value);
+  };
+
   const obtenerEmail = (event) => {
     setEmail(event.target.value);
   };
 
   const obtenerPais = (event) => {
     setPais(event.target.value);
+  };
+
+  const obtenerDepartamento = (event) => {
+    setDepartamento(event.target.value);
   };
 
   const obtenerDistrito = (event) => {
@@ -289,6 +307,10 @@ const Vehiculo = () => {
     setLugarDevolucion(event.target.value);
   };
 
+  const obtenerComentarios = (event) => {
+    setComentarios(event.target.value);
+  };
+
   useEffect(() => {
     const nuevoCodigo = Math.floor(Math.random() * 100000000).toString();
     setCodigo(nuevoCodigo);
@@ -297,10 +319,10 @@ const Vehiculo = () => {
   const exportarPDF = () => {
     const doc = new jsPDF();
     const texto = `
-    CÓDIGO DEL ALQUILER: ${codigoNuevo}
+    CÓDIGO DEL ALQUILER: ${codigo}
 
     DATOS DEL ARRENDATARIO:
-    <h2>Nombre: ${nombres}</h2>
+    Nombre: ${nombres}
     Apellido: ${apellidos}
     Correo electrónico: ${email}
     País: ${pais}
@@ -376,7 +398,11 @@ const Vehiculo = () => {
 
   useEffect(() => {
     if (success) {
-      alert("¡Tu pago con Paypal ha sido un éxito!");
+      Swal.fire(
+        "¡Tu reserva a sido un éxito!",
+        "¡Gracias por confiar en nosotros!",
+        "success"
+      );
       console.log("Order successful . Your order id is--", orderID);
     }
   }, [success]);
@@ -434,21 +460,13 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                   <h3>
                     ¡Elije las fechas que deseas alquilar tu vehiculo aquí!
                   </h3>
-                  <div>
-                    <strong>
-                      <span className="alert-aviso">
-                        *Si las fechas en el calendario te salen de color morado
-                        y no las puedes seleccionar, es por que esas fechas el
-                        vehículo ya está en reserva*
-                      </span>
-                    </strong>
-                  </div>
                 </section>
               </div>
 
               <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
-                <Alquileresfecha placa={vehiculo.placa} />
+                <Alquileresfecha />
               </div>
+
               <div className="col-md-6 col-sm-12">
                 <section>
                   <DateRange
@@ -497,15 +515,13 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
             </div>
           </div>
 
-          <></>
-
           <div className="contenedor-formulario contenedor-box-shadow mx-auto">
             <div className="contenedor-hijo-adicional">
               <div className="container">
                 <h4>Complete los datos:</h4>
                 <form id="miFormulario">
                   <div className="row">
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <label>Nombres:</label>
                       <input
                         id="nombres"
@@ -518,7 +534,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         required
                       />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <label htmlFor="name">Apellidos:</label>
                       <input
                         type="text"
@@ -529,8 +545,20 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         onChange={obtenerApellidos}
                         required
                       />
+                    </div>{" "}
+                    <div className="col-md-3">
+                      <label htmlFor="name">DNI:</label>
+                      <input
+                        type="text"
+                        name="dni"
+                        className="form-control"
+                        value={dni}
+                        placeholder="Ingrese su DNI"
+                        onChange={obtenerDni}
+                        required
+                      />
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3">
                       <label htmlFor="name">Email:</label>
                       <input
                         type="text"
@@ -555,6 +583,18 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                       />
                     </div>
                     <div className="col-md-3">
+                      <label htmlFor="name">Departamento:</label>
+                      <input
+                        type="text"
+                        name="departamento"
+                        className="form-control"
+                        value={departamento}
+                        placeholder="Ingrese su departamento"
+                        onChange={obtenerDepartamento}
+                        required
+                      />
+                    </div>
+                    <div className="col-md-3">
                       <label htmlFor="name">Distrito:</label>
                       <input
                         type="text"
@@ -566,7 +606,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         required
                       />
                     </div>
-                    <div className="col-md-7">
+                    <div className="col-md-4">
                       <label htmlFor="name">Direccion:</label>
                       <input
                         type="text"
@@ -602,7 +642,6 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         required
                       />
                     </div>
-
                     <div className="col-md-3">
                       <label htmlFor="name">Lugar recojo:</label>
                       <input
@@ -624,7 +663,19 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                         value={lugardevolucion}
                         placeholder="Ingrese en donde va devolver el carro"
                         onChange={obtenerLugarDevolucion}
+                        required
                       />
+                    </div>
+                    <div className="col-md-12">
+                      <label htmlFor="name">Comentario:</label>
+                      <textarea
+                        name="comentarios"
+                        className="form-control"
+                        value={comentarios}
+                        onChange={obtenerComentarios}
+                        rows="6"
+                        required
+                      ></textarea>
                     </div>
                   </div>
 
@@ -747,7 +798,13 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                                         </div>
                                         <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {apellidos}
-                                        </div>{" "}
+                                        </div>
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>DNI</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {dni}
+                                        </div>
                                         <div className="col-md-4 col-sm-12">
                                           <strong>Correo electrónico</strong>
                                         </div>
@@ -759,7 +816,13 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                                         </div>
                                         <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                           {pais}
-                                        </div>{" "}
+                                        </div>
+                                        <div className="col-md-4 col-sm-12">
+                                          <strong>Departamento</strong>
+                                        </div>
+                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                          {departamento}
+                                        </div>
                                         <div className="col-md-4 col-sm-12">
                                           <strong>Distrito</strong>
                                         </div>

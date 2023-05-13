@@ -86,7 +86,7 @@ const Contactanos = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="container mt-5">
         <h4>Contáctanos</h4>
         <p>

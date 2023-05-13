@@ -41,15 +41,16 @@
   justify-items: center;
 }
 
-
 .rdrDay.rdrDayDisabled {
-  background-color: #6528e0;
-  border-radius: 100%;
+  background-color: #d6d6d6;
+  /*border-radius: 510px;*/
 }
 
 .rdr-Day.is-disabled {
-  color: white;
+  color: black;
 }
-.rdr-Day.is-selected {
-  border-bottom: 2px solid blue;
+
+.rdrDay.rdrDayDisabled:hover,
+.rdr-Day.is-disabled:hover {
+  cursor: url('/public/images/prohibido.svg') 12 12, pointer !important;
 }

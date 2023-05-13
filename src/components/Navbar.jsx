@@ -38,14 +38,15 @@ const Navbar = (props) => {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex">
+
+            {/*<form className="d-flex">
               <Link className="nav-link" to="/login">
                 <span className="navbar-text me-2">Iniciar sesión</span>
               </Link>
             </form>
             <form className="d-flex" role="search">
               <button className="btn btn-sm btn-outline-danger">Salir</button>
-            </form>
+            </form>*/}
           </div>
         </div>
       </nav>

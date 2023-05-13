@@ -30,17 +30,6 @@ body {
   animation: animate 5s linear infinite;
 }
 
-/*
-.contenedor-padre {
-  width: 100vw;
-  height: 100vh; 
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-}
-*/
-
 img {
   width: 270px;
 }
@@ -74,10 +63,6 @@ p {
   opacity: 0.5;
   text-shadow: 0 1px 0 #fff;
   cursor: pointer;
-}
-
-.error {
-  color: red;
 }
 
 .fecha-ok {
