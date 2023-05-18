@@ -1,31 +1,9 @@
-.parrafo-quienes-somos {
-  color: #23272b;
+.imagen-quienes-somos {
+    width: 640px;
+    max-width: 100%;
+    min-width: 200px;
 }
 
-.section-quienes-somos {
-  border: 0px;
-}
-
-.container-quienes-somos {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 50px;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-  margin: 10px;
-}
-
-.container-contenido {
-  min-width: 200px;
-  max-width: 100%;
-  width: 600px;
-}
-
-.section-quienes-somos {
-  border: 0px;
-}
-
-.margin {
-  margin-bottom: 50px;
+.container-contenido{
+    padding: 15px;
 }

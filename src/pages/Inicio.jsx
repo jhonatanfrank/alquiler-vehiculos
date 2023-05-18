@@ -1,14 +1,17 @@
 import React from "react";
 import Carousel from "../components/Carousel";
 import Nuestrasmarcas from "../components/Nuestrasmarcas";
+import Calidadeficiencia from "../components/Calidadeficiencia";
 import Quienessomos from "../components/Quienessomos";
+import Testimonios from "../components/Testimonios";
 const Inicio = () => {
   return (
     <div>
       <Carousel />
       <Quienessomos />
-      <Nuestrasmarcas />
-      <div
+      <Calidadeficiencia />
+      <Testimonios />
+      {/*<div
         id="testmonial"
         class="container-fluid wow fadeIn bg-dark text-light has-height-lg middle-items"
       >
@@ -54,7 +57,7 @@ const Inicio = () => {
             </div>
           </div>
         </div>
-      </div>
+  </div>*/}
     </div>
   );
 };

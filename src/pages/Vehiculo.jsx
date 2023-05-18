@@ -60,13 +60,30 @@ const Vehiculo = () => {
   const [rangeText, setRangeText] = useState("");
 
   useEffect(() => {
-    fetch(
-      `http://localhost:8080/alquilervehiculos/api/alquileres/vehiculo/${placa}`
-    )
-      .then((response) => response.json())
-      .then((data) => setDates(data))
-      .then(setEstadoalquileres(true))
-      .catch((error) => console.log(error));
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/alquilervehiculos/api/alquileres/vehiculo/${placa}`,
+          {
+            headers: {
+              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("No se pudo obtener el alquiler del vehículo");
+        }
+        const data = await response.json();
+        setDates(data);
+        setFinicio(data.fechainicio);
+        setFfin(data.fechafin);
+        setEstadoalquileres(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
   }, [placa]);
 
   const blockedDates = dates
@@ -99,6 +116,7 @@ const Vehiculo = () => {
       </div>
     );
   }
+
   /*CALENDARIO FIN*/
 
   /* PAYPAL INICIO */
@@ -166,11 +184,17 @@ const Vehiculo = () => {
 
   /* Encontrando vehiculo x id */
   const params = useParams();
+
   useEffect(() => {
     const obtenerVehiculo = async () => {
       try {
         const respuesta = await fetch(
-          `http://192.168.1.40:8080/alquilervehiculos/api/vehiculos/${params.id}`
+          `http://192.168.1.40:8080/alquilervehiculos/api/vehiculos/${params.id}`,
+          {
+            headers: {
+              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+            },
+          }
         );
         if (!respuesta.ok) {
           console.log("No se pudo obtener el vehículo");
@@ -191,7 +215,7 @@ const Vehiculo = () => {
     obtenerVehiculo();
   }, [params.id]);
 
-  /*Metodo CREAR*/
+  /*POST */
   useEffect(() => {
     const submitData = async () => {
       const alquilerUrl =
@@ -232,29 +256,49 @@ const Vehiculo = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(alquilerData),
       });
 
       const alquilerResponseData = await alquilerResponse.json();
       console.log(alquilerResponseData);
+
       /*
       const vehiculoResponse = await fetch(vehiculoUrl, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(vehiculoData),
-      });    
-
+      });
+  
       const vehiculoResponseData = await vehiculoResponse.json();
       console.log(vehiculoResponseData);
       */
+
       setReservaExitosa(true);
     };
+
     if (success) {
       submitData();
       exportarPDF();
+      setNombres("");
+      setApellidos("");
+      setDni("");
+      setEmail("");
+      setPais("");
+      setDepartamento("");
+      setDistrito("");
+      setDireccion("");
+      setTelefono1("");
+      setTelefono2("");
+      setLugarRecojo("");
+      setLugarDevolucion("");
+      setComentarios("");
+    } else {
+      console.log("No se actualizó por que no fue success.");
     }
   }, [success]);
 
@@ -409,22 +453,6 @@ const Vehiculo = () => {
 
   /* PAYPAL FIN*/
 
-  /*INICIO HORA, MINUTOS, SEGUNDOS 
-
-  const horaMinutosSegundos = () => {
-    const time = new Date();
-    const hours = time.getHours().toString().padStart(2, "0"); // Agrega un cero si la hora es de un solo dígito
-    const minutes = time.getMinutes().toString().padStart(2, "0");
-    const seconds = time.getSeconds().toString().padStart(2, "0");
-    return `${hours}${minutes}${seconds}`;
-  };
-*/
-  /* puede ser por que no usaste el use effect al momento de sacar como parametro, asi como te sucedio con placa vehiculo */
-  /*
-const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
-const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
-*/
-
   return (
     <>
       {vehiculo ? (
@@ -476,6 +504,7 @@ const fechaFormateada = new Date(finicio).toLocaleDateString('es-ES', options);
                     showDateDisplay={true}
                     dayContentRenderer={dayContentRenderer}
                   />
+
                   <div>
                     <button
                       onClick={handleSave}

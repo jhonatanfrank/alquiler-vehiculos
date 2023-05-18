@@ -15,7 +15,12 @@ const Vehiculos = () => {
     const obtenerVehiculos = async () => {
       try {
         const response = await fetch(
-          "http://192.168.1.40:8080/alquilervehiculos/api/vehiculos"
+          "http://192.168.1.40:8080/alquilervehiculos/api/vehiculos",
+          {
+            headers: {
+              Authorization: "Basic " + btoa("admin:123"),
+            },
+          }
         );
         const data = await response.json();
         setVehiculos(data);
@@ -39,10 +44,11 @@ const Vehiculos = () => {
 
   return (
     <>
-      <div className="container-fluid p-5 bg-dark text-white text-center">
+      <div className="container-fluid p-5 contenedor-calidadeficiencia text-white text-center">
         <h1>Nuestros vehículos</h1>
         <p>Aquí podrás ver todos nuestros vehículos a disposición.</p>
       </div>
+
       <>
         {cargando ? (
           <Spinner />
@@ -82,7 +88,9 @@ const Vehiculos = () => {
                             </div>
                           </div>
                           <h5 className="text-center marca-text">
-                            <strong className="titulo-titulo">{vehiculo.marca.marca}</strong>
+                            <strong className="titulo-titulo">
+                              {vehiculo.marca.marca}
+                            </strong>
                           </h5>
                           <h3 className="text-center">
                             <strong>{vehiculo.placa}</strong>

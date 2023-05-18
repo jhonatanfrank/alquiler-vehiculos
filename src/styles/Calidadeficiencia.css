@@ -1,0 +1,57 @@
+.parrafo-quienes-somos {
+  color: #23272b;
+}
+
+.section-quienes-somos {
+  border: 0px;
+}
+
+.container-quienes-somos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.container-contenido {
+  min-width: 200px;
+  max-width: 100%;
+  width: 600px;
+}
+
+.section-quienes-somos {
+  border: 0px;
+}
+
+.margin {
+  margin-bottom: 50px;
+}
+
+.container-numero {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.numero {
+  background-color: #6528e0;
+  color: white;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
+  font-size: 30px;
+}
+
+.titulo-quienesomos {
+  color: #23272b;
+  margin-bottom: 50px;
+}
+
+.contenedor-calidadeficiencia {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.com/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1001%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(16%2c 14%2c 23%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c437.379C80.701%2c438.763%2c117.775%2c332.175%2c188.602%2c293.47C267.654%2c250.27%2c398.925%2c281.218%2c436.005%2c199.117C473.139%2c116.895%2c352.964%2c40.335%2c343.445%2c-49.38C333.314%2c-144.861%2c435.101%2c-250.63%2c379.947%2c-329.226C326.567%2c-405.295%2c204.029%2c-370.854%2c111.536%2c-379.858C36.278%2c-387.184%2c-36.755%2c-392.814%2c-110.694%2c-376.989C-189.584%2c-360.104%2c-271.914%2c-342.023%2c-329.453%2c-285.472C-389.034%2c-226.914%2c-412.546%2c-143.429%2c-431.191%2c-61.996C-451.203%2c25.404%2c-492.67%2c128.141%2c-440.921%2c201.362C-387.83%2c276.483%2c-265.59%2c243.66%2c-184.49%2c287.072C-113.11%2c325.281%2c-80.951%2c435.991%2c0%2c437.379' fill='%230d0b12'%3e%3c/path%3e%3cpath d='M1440 1020.662C1524.968 1022.191 1593.8890000000001 955.6669999999999 1659.823 902.0509999999999 1719.752 853.319 1780.226 799.55 1802.768 725.67 1824.187 655.47 1800.08 581.572 1779.064 511.25 1760.584 449.413 1724.682 398.054 1688.82 344.39599999999996 1647.627 282.761 1618.579 209.053 1553.439 173.66199999999998 1482.282 135.002 1396.271 124.05700000000002 1317.449 142.63 1236.579 161.685 1159.503 207.94299999999998 1113.715 277.272 1069.943 343.548 1083.5140000000001 428.611 1076.3319999999999 507.712 1069.564 582.255 1045.917 657.838 1072.82 727.686 1100.424 799.356 1165.1689999999999 846.331 1225.202 894.232 1291.4859999999999 947.121 1355.215 1019.137 1440 1020.662' fill='%2313111c'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1001'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

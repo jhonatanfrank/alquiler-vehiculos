@@ -17,10 +17,12 @@ const Contactanos = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(data),
       }
     );
+    
 
     const result = await response.json();
     console.log(result);
@@ -31,7 +33,7 @@ const Contactanos = () => {
 
   return (
     <>
-      <div className="container-fluid p-5 bg-dark text-white text-center">
+      <div className="container-fluid p-5 contenedor-calidadeficiencia text-white text-center">
         <h1>Contáctanos</h1>
         <p>Puedes contactarte con nosotros por aquí.</p>
       </div>

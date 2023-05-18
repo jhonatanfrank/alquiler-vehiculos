@@ -4,10 +4,10 @@ import "../styles/Nuestrasmarcas.css";
 const Nuestrasmarcas = () => {
   return (
     <>
-      <div className="container-fluid p-5 bg-dark text-white text-center">
-        <h1>Las marcas que usamos</h1>
-      </div>
       <section className="container-nuestras-marcas">
+        <div>
+          <h2>Tenemos vehículos de las marcas</h2>
+        </div>
         <div className="contenedor-hijo-adicional">
           <div className="marca 1">
             <img
