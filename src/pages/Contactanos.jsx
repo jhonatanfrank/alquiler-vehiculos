@@ -72,7 +72,7 @@ const Contactanos = () => {
               Correo
             </strong>
             <span className="d-flex align-items-center justify-content-center">
-              carsforall@gmail.com
+              rentcars@gmail.com
             </span>
           </div>
           <div className="contenedor-cards-contactanos col-lg-3 col-md-6 col-sm-6">
@@ -91,7 +91,7 @@ const Contactanos = () => {
 
       <div className="container mt-5">
         <h4>Contáctanos</h4>
-        <p>
+        <p className="titulo-titulo">
           Si desea solicitar información, complete y envíe el formulario a
           continuación.
         </p>

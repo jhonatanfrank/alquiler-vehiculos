@@ -60,3 +60,15 @@
   justify-content: center;
   justify-items: center;
 }
+
+.contenedor-metodos-de-pago{
+  margin-bottom: 50px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+}

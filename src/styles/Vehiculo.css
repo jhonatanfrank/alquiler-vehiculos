@@ -54,3 +54,12 @@
 .rdr-Day.is-disabled:hover {
   cursor: url('/public/images/prohibido.svg') 12 12, pointer !important;
 }
+
+.img-adicional{
+  width: 150px;
+}
+
+.contenedor-adicional{
+  padding: 15px;
+  margin-bottom: 15px;
+}

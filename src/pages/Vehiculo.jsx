@@ -154,6 +154,8 @@ const Vehiculo = () => {
   const [codigoNuevo, setCodigoNuevo] = useState("");
   const [alquiler, setAlquiler] = useState({});
   const [cargando, setCargando] = useState(true);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarEnlace, setMostrarEnlace] = useState(false);
 
   /* Modal de Terminos y condiciones */
   const modalTerminosCondiciones = () => {
@@ -452,7 +454,15 @@ const Vehiculo = () => {
   }, [success]);
 
   /* PAYPAL FIN*/
+  const handleFormulario = () => {
+    setMostrarFormulario(true);
+    setMostrarEnlace(false);
+  };
 
+  const handleLink = () => {
+    setMostrarFormulario(false);
+    setMostrarEnlace(true);
+  };
   return (
     <>
       {vehiculo ? (
@@ -479,7 +489,7 @@ const Vehiculo = () => {
             vehiculo={vehiculo}
           />
 
-          <Consejos />
+          {/*<Consejos />*/}
 
           <div className="container contenedor-fechas">
             <div className="row">
@@ -544,508 +554,578 @@ const Vehiculo = () => {
             </div>
           </div>
 
-          <div className="contenedor-formulario contenedor-box-shadow mx-auto">
-            <div className="contenedor-hijo-adicional">
-              <div className="container">
-                <h4>Complete los datos:</h4>
-                <form id="miFormulario">
-                  <div className="row">
-                    <div className="col-md-3">
-                      <label>Nombres:</label>
-                      <input
-                        id="nombres"
-                        type="text"
-                        name="nombres"
-                        className="form-control col-12"
-                        value={nombres}
-                        placeholder="Ingrese sus nombres"
-                        onChange={obtenerNombres}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Apellidos:</label>
-                      <input
-                        type="text"
-                        name="apellidos"
-                        className="form-control"
-                        value={apellidos}
-                        placeholder="Ingrese sus apellidos"
-                        onChange={obtenerApellidos}
-                        required
-                      />
-                    </div>{" "}
-                    <div className="col-md-3">
-                      <label htmlFor="name">DNI:</label>
-                      <input
-                        type="text"
-                        name="dni"
-                        className="form-control"
-                        value={dni}
-                        placeholder="Ingrese su DNI"
-                        onChange={obtenerDni}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Email:</label>
-                      <input
-                        type="text"
-                        name="email"
-                        className="form-control"
-                        value={email}
-                        placeholder="Ingrese su Correo Electrónico"
-                        onChange={obtenerEmail}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-2">
-                      <label htmlFor="name">Pais:</label>
-                      <input
-                        type="text"
-                        name="pais"
-                        className="form-control"
-                        value={pais}
-                        placeholder="Ingrese su país"
-                        onChange={obtenerPais}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Departamento:</label>
-                      <input
-                        type="text"
-                        name="departamento"
-                        className="form-control"
-                        value={departamento}
-                        placeholder="Ingrese su departamento"
-                        onChange={obtenerDepartamento}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Distrito:</label>
-                      <input
-                        type="text"
-                        name="distrito"
-                        className="form-control"
-                        value={distrito}
-                        placeholder="Ingrese su distrito"
-                        onChange={obtenerDistrito}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-4">
-                      <label htmlFor="name">Direccion:</label>
-                      <input
-                        type="text"
-                        name="direccion"
-                        className="form-control"
-                        value={direccion}
-                        placeholder="Ingrese su dirección"
-                        onChange={obtenerDireccion}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Telefono:</label>
-                      <input
-                        type="text"
-                        name="telefono"
-                        className="form-control"
-                        value={telefono1}
-                        placeholder="Ingrese su telefono"
-                        onChange={obtenerTelefono1}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Telefono alternativo:</label>
-                      <input
-                        type="text"
-                        name="telefonoalternativo"
-                        className="form-control"
-                        placeholder="Ingrese un número alternativo"
-                        value={telefono2}
-                        onChange={obtenerTelefono2}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Lugar recojo:</label>
-                      <input
-                        type="text"
-                        name="lugarrecojo"
-                        className="form-control"
-                        value={lugarrecojo}
-                        placeholder="Ingrese en donde va recoger el carro"
-                        onChange={obtenerLugarRecojo}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-3">
-                      <label htmlFor="name">Lugar devolucion:</label>
-                      <input
-                        type="text"
-                        name="lugardevolucion"
-                        className="form-control"
-                        value={lugardevolucion}
-                        placeholder="Ingrese en donde va devolver el carro"
-                        onChange={obtenerLugarDevolucion}
-                        required
-                      />
-                    </div>
-                    <div className="col-md-12">
-                      <label htmlFor="name">Comentario:</label>
-                      <textarea
-                        name="comentarios"
-                        className="form-control"
-                        value={comentarios}
-                        onChange={obtenerComentarios}
-                        rows="6"
-                        required
-                      ></textarea>
-                    </div>
-                  </div>
-
-                  <div className="form-check mt-3">
-                    <input
-                      type="checkbox"
-                      id="mi-checkbox"
-                      className="form-check-input"
-                      checked={checkActivo}
-                      onChange={manejarCambioCheck}
-                    />
-                    <label>
-                      Acepto que he leído los
-                      <strong onClick={modalTerminosCondiciones}>
-                        &nbsp;Términos y Condiciones
-                      </strong>
-                    </label>
-                  </div>
-                  <div>
-                    <button
-                      type="button"
-                      disabled={!checkActivo}
-                      className="btn btn-dark"
-                      onClick={modalPaypal}
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                </form>
-
-                <Modal
-                  size="xl"
-                  show={terminosycondiciones}
-                  onHide={() => setTerminosycondiciones(false)}
+          <div className="mt-5 contenedor-hijo-adicional contenedor-metodos-de-pago">
+            <div
+              className="contenedor-adicional-adicion contenedor-box-shadow"
+              onClick={handleFormulario}
+            >
+              <h3>Cancelar como invitado (Sin cuenta)</h3>
+              <br />
+              <div className="d-flex justify-content-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="100"
+                  height="100"
+                  fill="currentColor"
+                  className="bi bi-people-fill"
+                  viewBox="0 0 16 16"
                 >
-                  <Modal.Header closeButton>
-                    <Modal.Title>
-                      <strong>Terminos y Condiciones</strong>
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <h3>
-                      Antes de continuar con tu pago, lee nuestras condiciones:
-                    </h3>
-                    <ol>
-                      <li>
-                        El arrendador se compromete a entregar el vehículo en
-                        buen estado y en condiciones de ser utilizado de manera
-                        segura durante el período de alquiler.
-                      </li>
-                      <li>
-                        El arrendatario acepta que cualquier daño causado al
-                        vehículo durante el período de alquiler será su
-                        responsabilidad y que se le cobrará el costo total de
-                        las reparaciones necesarias. El arrendatario también se
-                        compromete a cumplir con todas las leyes y regulaciones
-                        de tráfico aplicables durante el período de alquiler.
-                      </li>
-                      <li>
-                        El arrendatario acepta que el vehículo es propiedad
-                        exclusiva del arrendador y que no tiene derecho a
-                        vender, transferir, hipotecar o gravar el vehículo de
-                        ninguna manera durante el período de alquiler.
-                      </li>
-                      <li>
-                        El arrendador no será responsable por ningún daño o
-                        pérdida de propiedad personal del arrendatario que
-                        ocurra durante el período de alquiler.
-                      </li>
-                      <li>
-                        Al aceptar estos términos y condiciones, el arrendatario
-                        acepta cumplir con todas las obligaciones y
-                        responsabilidades establecidas en este contrato.
-                      </li>
-                    </ol>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setTerminosycondiciones(false)}
-                    >
-                      Cerrar
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                  <path
+                    fill="black"
+                    d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"
+                  />
+                </svg>
+              </div>
+              <br />
+            </div>
 
-                <Modal size="lg" show={paypal} onHide={() => setPaypal(false)}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>
-                      {!success ? (
-                        <h1 className="titulo-titulo">Resumen de alquiler</h1>
-                      ) : (
-                        <h1 className="titulo-titulo">
-                          ¡Gracias por confiar en nosotros!
-                        </h1>
-                      )}
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <>
-                      <PayPalScriptProvider
-                        options={{ "client-id": CLIENT_ID }}
-                      >
-                        <div>
-                          <>
+            <a
+              className="no-underline"
+              href="https://api.whatsapp.com/send?phone=51976407080"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <div
+                className="contenedor-adicional-adicion contenedor-box-shadow"
+                onClick={handleLink}
+              >
+                <h3>Cancelar mediante Yape, Plin u otros</h3>
+                <br />
+                <div className="d-flex justify-content-center">
+                  <img
+                    src="https://www.massimple.pe/wp-content/uploads/2020/11/Diseno-sin-titulo-2020-11-23T140417.921.jpg"
+                    alt="yape-plin"
+                  />
+                </div>
+                <br />
+              </div>
+            </a>
+          </div>
+
+          {mostrarFormulario && (
+            <>
+              <div className="contenedor-formulario contenedor-box-shadow mx-auto">
+                <div className="contenedor-hijo-adicional">
+                  <div className="container">
+                    <h4>Complete los datos:</h4>
+                    <form id="miFormulario">
+                      <div className="row">
+                        <div className="col-md-3">
+                          <label>Nombres:</label>
+                          <input
+                            id="nombres"
+                            type="text"
+                            name="nombres"
+                            className="form-control col-12"
+                            value={nombres}
+                            placeholder="Ingrese sus nombres"
+                            onChange={obtenerNombres}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Apellidos:</label>
+                          <input
+                            type="text"
+                            name="apellidos"
+                            className="form-control"
+                            value={apellidos}
+                            placeholder="Ingrese sus apellidos"
+                            onChange={obtenerApellidos}
+                            required
+                          />
+                        </div>{" "}
+                        <div className="col-md-3">
+                          <label htmlFor="name">DNI:</label>
+                          <input
+                            type="text"
+                            name="dni"
+                            className="form-control"
+                            value={dni}
+                            placeholder="Ingrese su DNI"
+                            onChange={obtenerDni}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Email:</label>
+                          <input
+                            type="text"
+                            name="email"
+                            className="form-control"
+                            value={email}
+                            placeholder="Ingrese su Correo Electrónico"
+                            onChange={obtenerEmail}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-2">
+                          <label htmlFor="name">Pais:</label>
+                          <input
+                            type="text"
+                            name="pais"
+                            className="form-control"
+                            value={pais}
+                            placeholder="Ingrese su país"
+                            onChange={obtenerPais}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Departamento:</label>
+                          <input
+                            type="text"
+                            name="departamento"
+                            className="form-control"
+                            value={departamento}
+                            placeholder="Ingrese su departamento"
+                            onChange={obtenerDepartamento}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Distrito:</label>
+                          <input
+                            type="text"
+                            name="distrito"
+                            className="form-control"
+                            value={distrito}
+                            placeholder="Ingrese su distrito"
+                            onChange={obtenerDistrito}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <label htmlFor="name">Direccion:</label>
+                          <input
+                            type="text"
+                            name="direccion"
+                            className="form-control"
+                            value={direccion}
+                            placeholder="Ingrese su dirección"
+                            onChange={obtenerDireccion}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Telefono:</label>
+                          <input
+                            type="text"
+                            name="telefono"
+                            className="form-control"
+                            value={telefono1}
+                            placeholder="Ingrese su telefono"
+                            onChange={obtenerTelefono1}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Telefono alternativo:</label>
+                          <input
+                            type="text"
+                            name="telefonoalternativo"
+                            className="form-control"
+                            placeholder="Ingrese un número alternativo"
+                            value={telefono2}
+                            onChange={obtenerTelefono2}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Lugar recojo:</label>
+                          <input
+                            type="text"
+                            name="lugarrecojo"
+                            className="form-control"
+                            value={lugarrecojo}
+                            placeholder="Ingrese en donde va recoger el carro"
+                            onChange={obtenerLugarRecojo}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-3">
+                          <label htmlFor="name">Lugar devolucion:</label>
+                          <input
+                            type="text"
+                            name="lugardevolucion"
+                            className="form-control"
+                            value={lugardevolucion}
+                            placeholder="Ingrese en donde va devolver el carro"
+                            onChange={obtenerLugarDevolucion}
+                            required
+                          />
+                        </div>
+                        <div className="col-md-12">
+                          <label htmlFor="name">Comentario:</label>
+                          <textarea
+                            name="comentarios"
+                            className="form-control"
+                            value={comentarios}
+                            onChange={obtenerComentarios}
+                            rows="6"
+                            required
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <div className="form-check mt-3">
+                        <input
+                          type="checkbox"
+                          id="mi-checkbox"
+                          className="form-check-input"
+                          checked={checkActivo}
+                          onChange={manejarCambioCheck}
+                        />
+                        <label>
+                          Acepto que he leído los
+                          <strong onClick={modalTerminosCondiciones}>
+                            &nbsp;Términos y Condiciones
+                          </strong>
+                        </label>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          disabled={!checkActivo}
+                          className="btn btn-dark"
+                          onClick={modalPaypal}
+                        >
+                          Siguiente
+                        </button>
+                      </div>
+                    </form>
+
+                    <Modal
+                      size="xl"
+                      show={terminosycondiciones}
+                      onHide={() => setTerminosycondiciones(false)}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title>
+                          <strong>Terminos y Condiciones</strong>
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <h3>
+                          Antes de continuar con tu pago, lee nuestras
+                          condiciones:
+                        </h3>
+                        <ol>
+                          <li>
+                            El arrendador se compromete a entregar el vehículo
+                            en buen estado y en condiciones de ser utilizado de
+                            manera segura durante el período de alquiler.
+                          </li>
+                          <li>
+                            El arrendatario acepta que cualquier daño causado al
+                            vehículo durante el período de alquiler será su
+                            responsabilidad y que se le cobrará el costo total
+                            de las reparaciones necesarias. El arrendatario
+                            también se compromete a cumplir con todas las leyes
+                            y regulaciones de tráfico aplicables durante el
+                            período de alquiler.
+                          </li>
+                          <li>
+                            El arrendatario acepta que el vehículo es propiedad
+                            exclusiva del arrendador y que no tiene derecho a
+                            vender, transferir, hipotecar o gravar el vehículo
+                            de ninguna manera durante el período de alquiler.
+                          </li>
+                          <li>
+                            El arrendador no será responsable por ningún daño o
+                            pérdida de propiedad personal del arrendatario que
+                            ocurra durante el período de alquiler.
+                          </li>
+                          <li>
+                            Al aceptar estos términos y condiciones, el
+                            arrendatario acepta cumplir con todas las
+                            obligaciones y responsabilidades establecidas en
+                            este contrato.
+                          </li>
+                        </ol>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={() => setTerminosycondiciones(false)}
+                        >
+                          Cerrar
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+
+                    <Modal
+                      size="lg"
+                      show={paypal}
+                      onHide={() => setPaypal(false)}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title>
+                          {!success ? (
+                            <h1 className="titulo-titulo">
+                              Resumen de alquiler
+                            </h1>
+                          ) : (
+                            <h1 className="titulo-titulo">
+                              ¡Gracias por confiar en nosotros!
+                            </h1>
+                          )}
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <>
+                          <PayPalScriptProvider
+                            options={{ "client-id": CLIENT_ID }}
+                          >
                             <div>
-                              {!success ? (
-                                <>
-                                  <div className="row d-flex justify-content-center align-items-center">
-                                    <div className="container contenedor-resumen">
-                                      <div className="row">
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Nombres</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {nombres}
-                                        </div>
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Apellidos</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {apellidos}
-                                        </div>
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>DNI</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {dni}
-                                        </div>
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Correo electrónico</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {email}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>País</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {pais}
-                                        </div>
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Departamento</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {departamento}
-                                        </div>
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Distrito</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {distrito}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Dirección</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {direccion}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Telefono</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {telefono1}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Telefono alternativo</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {telefono2}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Fecha inicio</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {finicio}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Fecha fin</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {ffin}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Días alquiler</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {diferencia1}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Placa</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.placa}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Asientos</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.asientos}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Marca</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.marca.marca}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Modelo</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.modelo}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Año</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.anio}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Tipo de combustible</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {
-                                            vehiculo.tipocombustible
-                                              .tipocombustible
-                                          }
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Tipo de manejo</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {vehiculo.tipomanejo.tipomanejo}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Lugar de recojo</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {lugarrecojo}
-                                        </div>{" "}
-                                        <div className="col-md-4 col-sm-12">
-                                          <strong>Lugar de devolución</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                          {lugardevolucion}
-                                        </div>
-                                        <hr />
-                                        <div className="col-md-6 col-sm-6">
-                                          <strong>Total a pagar:</strong>
-                                        </div>
-                                        <div className="titulo-titulo col-md-6 col-sm-6 d-flex justify-content-end">
-                                          <div className="contenedor-padre-precio-vehiculo-resumen">
-                                            <div className="contenedor-precio-vehiculo-resumen">
-                                              <strong className="titulo-precio-vehiculo-resumen">
-                                                ${precioFinal}
+                              <>
+                                <div>
+                                  {!success ? (
+                                    <>
+                                      <div className="row d-flex justify-content-center align-items-center">
+                                        <div className="container contenedor-resumen">
+                                          <div className="row">
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Nombres</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {nombres}
+                                            </div>
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Apellidos</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {apellidos}
+                                            </div>
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>DNI</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {dni}
+                                            </div>
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>
+                                                Correo electrónico
                                               </strong>
                                             </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {email}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>País</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {pais}
+                                            </div>
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Departamento</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {departamento}
+                                            </div>
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Distrito</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {distrito}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Dirección</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {direccion}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Telefono</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {telefono1}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>
+                                                Telefono alternativo
+                                              </strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {telefono2}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Fecha inicio</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {finicio}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Fecha fin</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {ffin}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Días alquiler</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {diferencia1}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Placa</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.placa}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Asientos</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.asientos}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Marca</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.marca.marca}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Modelo</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.modelo}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Año</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.anio}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>
+                                                Tipo de combustible
+                                              </strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {
+                                                vehiculo.tipocombustible
+                                                  .tipocombustible
+                                              }
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Tipo de manejo</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {vehiculo.tipomanejo.tipomanejo}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>Lugar de recojo</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {lugarrecojo}
+                                            </div>{" "}
+                                            <div className="col-md-4 col-sm-12">
+                                              <strong>
+                                                Lugar de devolución
+                                              </strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
+                                              {lugardevolucion}
+                                            </div>
+                                            <hr />
+                                            <div className="col-md-6 col-sm-6">
+                                              <strong>Total a pagar:</strong>
+                                            </div>
+                                            <div className="titulo-titulo col-md-6 col-sm-6 d-flex justify-content-end">
+                                              <div className="contenedor-padre-precio-vehiculo-resumen">
+                                                <div className="contenedor-precio-vehiculo-resumen">
+                                                  <strong className="titulo-precio-vehiculo-resumen">
+                                                    ${precioFinal}
+                                                  </strong>
+                                                </div>
+                                              </div>
+                                            </div>{" "}
                                           </div>
-                                        </div>{" "}
+                                        </div>
                                       </div>
-                                    </div>
+                                    </>
+                                  ) : null}
+                                </div>
+                              </>
+                              <div className="wrapper">
+                                <div className="product-info">
+                                  <div className="product-price-btn">
+                                    <p className="titulo-titulo"></p>
+                                    <br></br>
+                                    {success ? (
+                                      <>
+                                        <section className="section">
+                                          <h1 className="titulo-titulo">
+                                            ¡Pago exitoso!
+                                          </h1>
+                                          <p className="titulo-titulo">
+                                            Se acaba de descargar
+                                            automaticamente el resumen de tu
+                                            alquiler en tu computador. Si tienes
+                                            bloqueado las descargas automaticas,
+                                            desbloquealas. En caso contrario,
+                                            puedes darle click al botón de
+                                            "Exportar PDF", para que puedas
+                                            tener una copia.
+                                          </p>
+                                          <p className="titulo-titulo">
+                                            Recuerda traer el PDF al momento de
+                                            recoger tu vehículo.
+                                          </p>
+                                          <button
+                                            className="btn btn-dark"
+                                            onClick={exportarPDF}
+                                          >
+                                            Exportar PDF
+                                          </button>
+                                        </section>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div className="container d-flex justify-content-center align-items-center">
+                                          <button
+                                            className="buy-btn btn btn-dark col-6"
+                                            type="submit"
+                                            onClick={() => setShow(true)}
+                                          >
+                                            ¡Cancelar ahora!
+                                          </button>
+                                        </div>
+                                      </>
+                                    )}
                                   </div>
-                                </>
+                                </div>
+                              </div>
+                              <br></br>
+
+                              {show ? (
+                                <section>
+                                  <PayPalButtons
+                                    style={{ layout: "vertical" }}
+                                    createOrder={createOrder}
+                                    onApprove={onApprove}
+                                  />
+                                </section>
                               ) : null}
                             </div>
-                          </>
-                          <div className="wrapper">
-                            <div className="product-info">
-                              <div className="product-price-btn">
-                                <p className="titulo-titulo"></p>
-                                <br></br>
-                                {success ? (
-                                  <>
-                                    <section className="section">
-                                      <h1 className="titulo-titulo">
-                                        ¡Pago exitoso!
-                                      </h1>
-                                      <p className="titulo-titulo">
-                                        Se acaba de descargar automaticamente el
-                                        resumen de tu alquiler en tu computador.
-                                        Si tienes bloqueado las descargas
-                                        automaticas, desbloquealas. En caso
-                                        contrario, puedes darle click al botón
-                                        de "Exportar PDF", para que puedas tener
-                                        una copia.
-                                      </p>
-                                      <p className="titulo-titulo">
-                                        Recuerda traer el PDF al momento de
-                                        recoger tu vehículo.
-                                      </p>
-                                      <button
-                                        className="btn btn-dark"
-                                        onClick={exportarPDF}
-                                      >
-                                        Exportar PDF
-                                      </button>
-                                    </section>
-                                  </>
-                                ) : (
-                                  <>
-                                    <div className="container d-flex justify-content-center align-items-center">
-                                      <button
-                                        className="buy-btn btn btn-dark col-6"
-                                        type="submit"
-                                        onClick={() => setShow(true)}
-                                      >
-                                        ¡Cancelar ahora!
-                                      </button>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <br></br>
-
-                          {show ? (
-                            <section>
-                              <PayPalButtons
-                                style={{ layout: "vertical" }}
-                                createOrder={createOrder}
-                                onApprove={onApprove}
-                              />
-                            </section>
-                          ) : null}
-                        </div>
-                      </PayPalScriptProvider>
-                    </>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="secondary"
-                      onClick={() => setPaypal(false)}
-                    >
-                      Cerrar
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
+                          </PayPalScriptProvider>
+                        </>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={() => setPaypal(false)}
+                        >
+                          Cerrar
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </>
       ) : (
         <>
