@@ -27,6 +27,7 @@ const Vehiculo = () => {
   const [ffin, setFfin] = useState("");
   const [estadofechas, setEstadofechas] = useState(false);
   const [estadoalquileres, setEstadoalquileres] = useState(false);
+  const [estadoactual, setEstadoactual] = useState(0);
   const [placa, setPlaca] = useState(true);
 
   /* calendario */
@@ -251,7 +252,7 @@ const Vehiculo = () => {
       };
 
       const vehiculoData = {
-        estado: false,
+        estado: 3,
       };
 
       const alquilerResponse = await fetch(alquilerUrl, {
@@ -266,7 +267,7 @@ const Vehiculo = () => {
       const alquilerResponseData = await alquilerResponse.json();
       console.log(alquilerResponseData);
 
-      /*
+      
       const vehiculoResponse = await fetch(vehiculoUrl, {
         method: "PATCH",
         headers: {
@@ -278,7 +279,7 @@ const Vehiculo = () => {
   
       const vehiculoResponseData = await vehiculoResponse.json();
       console.log(vehiculoResponseData);
-      */
+      
 
       setReservaExitosa(true);
     };
@@ -467,7 +468,7 @@ const Vehiculo = () => {
     <>
       {vehiculo ? (
         <>
-          <div className="container-fluid p-5 bg-dark text-white text-center">
+          <div className="container-fluid p-5 contenedor-calidadeficiencia text-white text-center">
             <h1>!Resérvalo aquí!</h1>
             <p>
               Puedes reservar el vehículo o alquilar aquí, siguiendo los pasos

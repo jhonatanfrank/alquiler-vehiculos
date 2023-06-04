@@ -7,7 +7,11 @@ const Navbar = (props) => {
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
           <Link className="nav-link" to="/">
-            Rent Car´s
+            <img
+              src="./images/logo-rent-cars.png"
+              alt="logo-rent-cars"
+              className="img-navbar"          
+            />
           </Link>
           <button
             className="navbar-toggler"
@@ -22,17 +26,17 @@ const Navbar = (props) => {
           </button>
           <div className="collapse navbar-collapse" id="navbarText">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              <li className="nav-item p-2">
                 <Link className="nav-link" to="/">
                   Inicio
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item p-2">
                 <Link className="nav-link" to="/vehiculos">
                   Vehiculos
                 </Link>
               </li>
-              <li className="nav-item">
+              <li className="nav-item p-2">
                 <Link className="nav-link" to="/contactanos">
                   Contactanos
                 </Link>

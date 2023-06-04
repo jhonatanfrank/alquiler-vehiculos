@@ -1,6 +1,5 @@
 import React from "react";
 import Carousel from "../components/Carousel";
-import Nuestrasmarcas from "../components/Nuestrasmarcas";
 import Calidadeficiencia from "../components/Calidadeficiencia";
 import Quienessomos from "../components/Quienessomos";
 import Testimonios from "../components/Testimonios";
