@@ -85,3 +85,13 @@ a:hover {
   color: #6528e0;
   font-weight: bold;
 }
+
+.container-cupon{
+  border-radius: 5px 5px 0px 0px;
+  padding: 7px;
+  background-color: #e02828;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 0px;
+}

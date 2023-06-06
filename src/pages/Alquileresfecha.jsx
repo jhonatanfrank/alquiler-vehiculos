@@ -5,7 +5,6 @@ const Alquileresfecha = (props) => {
     <>
       <section>
         <h1 className="titulo-titulo">¡Reserva tu vehículo ahora!</h1>
-
         <div>
           <strong>
             <span className="alert-aviso">

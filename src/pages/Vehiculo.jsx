@@ -20,6 +20,14 @@ import "react-date-range/dist/theme/default.css";
 /*FIN CALENDARIO */
 
 const Vehiculo = () => {
+  const [nuevopreciofinal, setNuevopreciofinal] = useState(0);
+  const [estadoBoton, setEstadoBoton] = useState("");
+  const [inputValue, setInputValue] = useState("");
+  const [estadoCodigoDescuento, setEstadoCodigoDescuento] = useState(false);
+  const [cuponesDescuentos, setCuponesDescuentos] = useState([]);
+  const [descuento, setDescuento] = useState([]);
+  const [codigoDescuento, setCodigoDescuento] = useState("");
+
   /* CALENDARIO INICIO */
   const [dates, setDates] = useState([]);
   const [diferencia1, setDiferencia1] = useState(0);
@@ -29,6 +37,7 @@ const Vehiculo = () => {
   const [estadoalquileres, setEstadoalquileres] = useState(false);
   const [estadoactual, setEstadoactual] = useState(0);
   const [placa, setPlaca] = useState(true);
+  const [idVehiculo, setIdVehiculo] = useState(0);
 
   /* calendario */
   const [dateRange, setDateRange] = useState([
@@ -56,9 +65,64 @@ const Vehiculo = () => {
     setRangeText(`${range} (${duration} días)`);
     setFinicio(startISOString);
     setFfin(endISOString);
+    setEstadoBoton(true);
   };
 
   const [rangeText, setRangeText] = useState("");
+
+  useEffect(() => {
+    const fetchCuponesDescuentos = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/alquilervehiculos/api/cuponesdescuentos/",
+          {
+            headers: {
+              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+            },
+          }
+        );
+        if (!response.ok) {
+          throw new Error("No se pudo obtener los cupones de descuento");
+        }
+        const data = await response.json();
+        const filteredData = data.filter(
+          (item) => item.vehiculo.id === idVehiculo
+        ); // Filtra los datos por el campo vehiculo.id
+        console.log(filteredData); // Muestra los datos filtrados en la consola
+
+        const codigosDescuento = filteredData.map(
+          (item) => item.codigodescuento
+        ); // Obtiene solo los valores del campo codigodescuento
+        console.log(codigosDescuento); // Muestra los códigos de descuento en la consola
+
+        // Asigna el valor del primer elemento del arreglo codigosDescuento al estado codigoDescuento
+        setCodigoDescuento(codigosDescuento[0]);
+        console.log("el codigo es " + typeof codigoDescuento);
+
+        if (codigoDescuento === "ZZZj987") {
+          console.log("son iguales");
+        } else {
+          console.log("son diferentes");
+        }
+
+        const porcentajesDescuento = filteredData.map((item) =>
+          parseFloat(item.porcentajedescuento)
+        ); // Convierte los valores a tipo double utilizando parseFloat
+        console.log(porcentajesDescuento); // Muestra los porcentajes de descuento en la consola
+
+        // Asigna el arreglo completo porcentajesDescuento al estado porcentajesDescuento
+        setDescuento(porcentajesDescuento);
+
+        console.log("el % es " + typeof descuento);
+
+        setCuponesDescuentos(filteredData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCuponesDescuentos();
+  }, [idVehiculo]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,7 +147,6 @@ const Vehiculo = () => {
         console.log(error);
       }
     };
-
     fetchData();
   }, [placa]);
 
@@ -205,6 +268,7 @@ const Vehiculo = () => {
         const vehiculo = await respuesta.json();
         setPlaca(vehiculo.placa);
         setVehiculo(vehiculo);
+        setIdVehiculo(vehiculo.id);
 
         setTimeout(() => {
           setCargando(false);
@@ -267,7 +331,6 @@ const Vehiculo = () => {
       const alquilerResponseData = await alquilerResponse.json();
       console.log(alquilerResponseData);
 
-      
       const vehiculoResponse = await fetch(vehiculoUrl, {
         method: "PATCH",
         headers: {
@@ -276,10 +339,9 @@ const Vehiculo = () => {
         },
         body: JSON.stringify(vehiculoData),
       });
-  
+
       const vehiculoResponseData = await vehiculoResponse.json();
       console.log(vehiculoResponseData);
-      
 
       setReservaExitosa(true);
     };
@@ -415,7 +477,7 @@ const Vehiculo = () => {
             description: "Sunflower",
             amount: {
               currency_code: "USD",
-              value: precioFinal,
+              value: nuevopreciofinal,
             },
           },
         ],
@@ -464,8 +526,32 @@ const Vehiculo = () => {
     setMostrarFormulario(false);
     setMostrarEnlace(true);
   };
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  useEffect(() => {
+    if (inputValue === codigoDescuento) {
+      setEstadoCodigoDescuento(true);
+    } else {
+      setEstadoCodigoDescuento(false);
+    }
+  }, [inputValue, codigoDescuento, setEstadoCodigoDescuento]);
+  
+
+  useEffect(() => {
+    if (inputValue === codigoDescuento) {
+      setNuevopreciofinal(precioFinal - descuento * precioFinal);
+    } else {
+      setNuevopreciofinal(precioFinal);
+    }
+  }, [inputValue, codigoDescuento, descuento, precioFinal]);
+  
+
   return (
     <>
+      {descuento * 100} <br />
+      {codigoDescuento}
       {vehiculo ? (
         <>
           <div className="container-fluid p-5 contenedor-calidadeficiencia text-white text-center">
@@ -498,12 +584,59 @@ const Vehiculo = () => {
                 <section>
                   <h3>
                     ¡Elije las fechas que deseas alquilar tu vehiculo aquí!
+                    {/*      <section>
+        <h1 className="titulo-titulo">¡Reserva tu vehículo ahora!</h1>
+        <div>
+          <strong>
+            <span className="alert-aviso">
+              *Si las fechas en el calendario te salen de color plomo y no las
+              puedes seleccionar, es por que esas fechas el vehículo ya está en
+              reserva*
+            </span>
+          </strong>
+        </div>
+      </section> */}
                   </h3>
                 </section>
               </div>
 
               <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
-                <Alquileresfecha />
+                <div className="container">
+                  <div className="row">
+                    <div className="col-12">
+                      <h2>Ingresa tu cupón de descuento</h2>
+                    </div>
+                    <div className="col-10">
+                      <input
+                        className="form-control"
+                        type="text"
+                        disabled={!estadoBoton}
+                        value={inputValue}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                    <div className="col-2">     
+                    </div>
+                    <div className="col-12 mt-3">
+                      <h5>
+                        {estadoCodigoDescuento === true ? (
+                          <>
+                            El precio final es de $
+                            {precioFinal - descuento * precioFinal}
+                          </>
+                        ) : null}
+                      </h5>
+                      <h5>
+                        {!estadoBoton ? (
+                          <>
+                            Tienes que seleccionar un rango de fechas para poder
+                            activar el cupón
+                          </>
+                        ) : null}
+                      </h5>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="col-md-6 col-sm-12">
@@ -590,7 +723,7 @@ const Vehiculo = () => {
                 className="contenedor-adicional-adicion contenedor-box-shadow"
                 onClick={handleLink}
               >
-                <h3>Cancelar mediante Yape, Plin u otros</h3>
+                <h3>Cancelar con Yape, Plin u otros mediante WhatsApp</h3>
                 <br />
                 <div className="d-flex justify-content-center">
                   <img
@@ -1037,7 +1170,17 @@ const Vehiculo = () => {
                                               <div className="contenedor-padre-precio-vehiculo-resumen">
                                                 <div className="contenedor-precio-vehiculo-resumen">
                                                   <strong className="titulo-precio-vehiculo-resumen">
-                                                    ${precioFinal}
+                                                    {estadoCodigoDescuento ===
+                                                    true ? (
+                                                      <>
+                                                        $
+                                                        {precioFinal -
+                                                          descuento *
+                                                            precioFinal}
+                                                      </>
+                                                    ) : (
+                                                      <>${precioFinal}</>
+                                                    )}
                                                   </strong>
                                                 </div>
                                               </div>
