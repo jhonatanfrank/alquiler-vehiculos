@@ -234,7 +234,7 @@ const Testimonios = () => {
               width="30"
               height="30"
               fill="currentColor"
-              class="bi bi-star"
+              className="bi bi-star"
               viewBox="0 0 16 16"
             >
               <path

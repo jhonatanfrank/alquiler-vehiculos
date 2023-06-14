@@ -20,6 +20,7 @@ import "react-date-range/dist/theme/default.css";
 /*FIN CALENDARIO */
 
 const Vehiculo = () => {
+  const [email2, setEmail2] = useState("");
   const [nuevopreciofinal, setNuevopreciofinal] = useState(0);
   const [estadoBoton, setEstadoBoton] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -284,6 +285,36 @@ const Vehiculo = () => {
 
   /*POST */
   useEffect(() => {
+    const enviarCorreo = (formData) => {
+      const data = {};
+      formData.forEach((value, key) => (data[key] = value));
+
+      const userEmail = data.email; // Obtiene el correo electrónico ingresado por el usuario
+
+      const subject = "¡Tu alquiler con RENT CARS!";
+
+      // Envía los datos del formulario al correo electrónico proporcionado y a la copia
+      fetch("https://formspree.io/f/mzbwzekq", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          _replyto: userEmail,
+          _cc: email2,
+          _subject: subject,
+        }), // Agrega el correo como "_cc", el asunto personalizado "_subject" y el mensaje personalizado "_message"
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error("Error al enviar el formulario:", error);
+        });
+    };
+
     const submitData = async () => {
       const alquilerUrl =
         "http://localhost:8080/alquilervehiculos/api/alquileres";
@@ -306,7 +337,7 @@ const Vehiculo = () => {
         lugarrecojo: lugarrecojo,
         lugardevolucion: lugardevolucion,
         comentarios: comentarios,
-        preciofinal: precioFinal,
+        preciofinal: nuevopreciofinal,
         fechainicio: fecha1_c,
         fechafin: fecha2_c,
         diasalquiler: diferencia1,
@@ -347,8 +378,48 @@ const Vehiculo = () => {
     };
 
     if (success) {
+      const formData = new FormData();
+      formData.append("Codigo del Alquiler", codigo);
+
+      formData.append("Nombres", nombres);
+      formData.append("Apellidos", apellidos);
+      formData.append("DNI", dni);
+      formData.append("Correo electrónico", email);
+      formData.append("País", pais);
+      formData.append("Departamento", departamento);
+      formData.append("Dirección", direccion);
+      formData.append("Distrito", distrito);
+      formData.append("Telefono", telefono1);
+      formData.append("Telefono alternativo", telefono2);
+      formData.append("Lugar de Recojo", lugarrecojo);
+      formData.append("Lugar de Devoculcion", lugardevolucion);
+      formData.append("Comentarios:", comentarios);
+
+      formData.append("Placa", vehiculo.placa);
+      formData.append("Asientos", vehiculo.asientos);
+      formData.append("Marca", vehiculo.marca.marca);
+      formData.append("Modelo", vehiculo.modelo);
+      formData.append("Año", vehiculo.anio);
+      formData.append(
+        "Tipo de combustible",
+        vehiculo.tipocombustible.tipocombustible
+      );
+      formData.append("Tipo de manejo", vehiculo.tipomanejo.tipomanejo);
+
+      formData.append("Fecha inicio", finicio);
+      formData.append("Fecha fin", ffin);
+      formData.append("Días de alquiler", diferencia1);
+
+      formData.append("Lugar recojo", lugarrecojo);
+      formData.append("Lugar devolucion", lugardevolucion);
+
+      formData.append("Precio final", "$" + nuevopreciofinal);
+      formData.append("Codigo del descuento", codigoDescuento);
+
+      enviarCorreo(formData);
       submitData();
       exportarPDF();
+
       setNombres("");
       setApellidos("");
       setDni("");
@@ -363,7 +434,7 @@ const Vehiculo = () => {
       setLugarDevolucion("");
       setComentarios("");
     } else {
-      console.log("No se actualizó por que no fue success.");
+      console.log("No se actualizó porque no fue exitoso (success).");
     }
   }, [success]);
 
@@ -452,14 +523,27 @@ const Vehiculo = () => {
     FECHAS DEL ALQUILER:
     Fecha inicio: ${finicio}
     Fecha fin: ${ffin}
+    Dias de alquiler: ${diferencia1}
 
     LUGAR DE ROCOJO Y DEVOLUCION:
     Lugar recojo: ${lugarrecojo}
     Lugar devolucion: ${lugardevolucion}
+
+    DATOS DE PAGO:
+    Precio real: ${precioFinal}
+    Precio con descuento: ${nuevopreciofinal}
+    Porcentaje de descuento: ${descuento * 100}%
+    Codigo de descuento utilizado: ${codigoDescuento}
   `;
     doc.text(texto, 10, 10);
     doc.save("ALQUILER " + codigo + " " + nombres + " " + apellidos + ".pdf");
   };
+
+  useEffect(() => {
+    console.log(email);
+    setEmail2(email);
+    console.log("email 2: " + email2);
+  }, [email, email2]);
 
   /* PAYPAL INICIO */
   useEffect(() => {
@@ -537,7 +621,6 @@ const Vehiculo = () => {
       setEstadoCodigoDescuento(false);
     }
   }, [inputValue, codigoDescuento, setEstadoCodigoDescuento]);
-  
 
   useEffect(() => {
     if (inputValue === codigoDescuento) {
@@ -546,12 +629,9 @@ const Vehiculo = () => {
       setNuevopreciofinal(precioFinal);
     }
   }, [inputValue, codigoDescuento, descuento, precioFinal]);
-  
 
   return (
     <>
-      {descuento * 100} <br />
-      {codigoDescuento}
       {vehiculo ? (
         <>
           <div className="container-fluid p-5 contenedor-calidadeficiencia text-white text-center">
@@ -599,46 +679,6 @@ const Vehiculo = () => {
                   </h3>
                 </section>
               </div>
-
-              <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-12">
-                      <h2>Ingresa tu cupón de descuento</h2>
-                    </div>
-                    <div className="col-10">
-                      <input
-                        className="form-control"
-                        type="text"
-                        disabled={!estadoBoton}
-                        value={inputValue}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="col-2">     
-                    </div>
-                    <div className="col-12 mt-3">
-                      <h5>
-                        {estadoCodigoDescuento === true ? (
-                          <>
-                            El precio final es de $
-                            {precioFinal - descuento * precioFinal}
-                          </>
-                        ) : null}
-                      </h5>
-                      <h5>
-                        {!estadoBoton ? (
-                          <>
-                            Tienes que seleccionar un rango de fechas para poder
-                            activar el cupón
-                          </>
-                        ) : null}
-                      </h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               <div className="col-md-6 col-sm-12">
                 <section>
                   <DateRange
@@ -648,7 +688,6 @@ const Vehiculo = () => {
                     showDateDisplay={true}
                     dayContentRenderer={dayContentRenderer}
                   />
-
                   <div>
                     <button
                       onClick={handleSave}
@@ -656,35 +695,131 @@ const Vehiculo = () => {
                     >
                       Guardar
                     </button>
-                  </div>
-                  <hr />
-
-                  {estadofechas ? (
-                    <>
-                      <div className="titulo-titulo">
-                        <strong>Fecha inicio seleccionada:</strong>{" "}
-                        {new Date(finicio).toISOString().substring(0, 10)}
-                      </div>
-                      <div className="titulo-titulo">
-                        <strong>Fecha fin seleccionada:</strong>{" "}
-                        {new Date(ffin).toISOString().substring(0, 10)}
-                      </div>
-                      <div className="titulo-titulo">
-                        <strong>Dias de alquiler:</strong> {diferencia1}
-                      </div>
-                    </>
-                  ) : (
-                    <div>
-                      <strong>
-                        <span className="alert-aviso">
-                          *Selecciona mediante el calendario el rango de fechas
-                          en el que deseas alquilar nuestro vehículo.*
-                        </span>
-                      </strong>
-                    </div>
-                  )}
+                  </div>{" "}
                 </section>
               </div>
+              {descuento <= 0 ? (
+                <>
+                  <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                    <section>
+                      <div className="container contenedor-descuento">
+                        <div className="row">
+                          <div className="titulo-titulo-precio">
+                            <strong>Precio actual</strong>
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div className="conteiner-precio-vehiculo">
+                              $ {precioFinal}
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <strong>
+                              Actualmente este vehiculo no tiene ningún cupón de
+                              descuento
+                            </strong>
+                          </div>
+                        </div>
+                      </div>
+                      {estadofechas ? (
+                        <>
+                          <div className="titulo-titulo mt-3">
+                            <strong>Fecha inicio seleccionada:</strong>{" "}
+                            {new Date(finicio).toLocaleDateString()}
+                          </div>
+                          <div className="titulo-titulo">
+                            <strong>Fecha fin seleccionada:</strong>{" "}
+                            {new Date(ffin).toLocaleDateString()}
+                          </div>
+                          <div className="titulo-titulo">
+                            <strong>Días de alquiler:</strong> {diferencia1}
+                          </div>
+                        </>
+                      ) : (
+                        <div>{null}</div>
+                      )}
+                    </section>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="col-md-6 col-sm-12 d-flex justify-content-center align-items-center">
+                    <section>
+                      <div className="container contenedor-descuento">
+                        <div className="row">
+                          <div className="titulo-titulo-precio">
+                            <strong>Precio actual</strong>
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div className="conteiner-precio-vehiculo">
+                              $ {precioFinal}
+                            </div>
+                          </div>
+                          <div className="mt-3">
+                            {estadoCodigoDescuento === true ? (
+                              <div className="titulo-titulo-precio">
+                                <strong>Precio con descuento</strong>
+                              </div>
+                            ) : null}
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center">
+                            <div className="conteiner-precio-vehiculo">
+                              {estadoCodigoDescuento === true ? (
+                                <>$ {precioFinal - descuento * precioFinal}</>
+                              ) : null}
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <strong>
+                              Ingresa tu cupon para obtener el{" "}
+                              {(descuento * 100).toFixed(1)}% de descuento
+                            </strong>
+                          </div>
+                          <div className="mt-3">
+                            <input
+                              className="form-control texto-input text-center"
+                              type="text"
+                              disabled={!estadoBoton}
+                              value={inputValue}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                          <div>
+                            {!estadoBoton ? (
+                              <div>
+                                <strong className="alert-aviso">
+                                  *Tienes que seleccionar un rango de fechas
+                                  para poder activar el cupón*
+                                </strong>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                      <>
+                        <div>
+                          {estadofechas ? (
+                            <>
+                              <div className="titulo-titulo mt-3">
+                                <strong>Fecha inicio seleccionada:</strong>{" "}
+                                {new Date(finicio).toLocaleDateString()}
+                              </div>
+                              <div className="titulo-titulo">
+                                <strong>Fecha fin seleccionada:</strong>{" "}
+                                {new Date(ffin).toLocaleDateString()}
+                              </div>
+                              <div className="titulo-titulo">
+                                <strong>Días de alquiler:</strong> {diferencia1}
+                              </div>
+                            </>
+                          ) : (
+                            <div>{null}</div>
+                          )}
+                        </div>
+                      </>
+                    </section>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

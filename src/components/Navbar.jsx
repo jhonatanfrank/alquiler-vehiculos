@@ -6,13 +6,13 @@ const Navbar = (props) => {
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          <Link className="nav-link" to="/">
+          {/*<Link className="nav-link" to="/">
             <img
               src="./images/logo-rent-cars.png"
               alt="logo-rent-cars"
               className="img-navbar"          
             />
-          </Link>
+  </Link>*/}
           <button
             className="navbar-toggler"
             type="button"

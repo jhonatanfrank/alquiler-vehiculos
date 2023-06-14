@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/Contactanos.css";
+import { set } from "date-fns";
 
 const Contactanos = () => {
+  const [email, setEmail] = useState("");
+  const [email2, setEmail2] = useState("");
   const [sent, setSent] = useState(false);
 
-  async function handleSubmit(event) {
+  const enviarCorreo = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
 
-    const response = await fetch(
+    const userEmail = data.email; // Obtiene el correo electrónico ingresado por el usuario
+
+    const subject = "¡Nuevo formulario de contacto recibido!";
+    const message = `Tienes una nueva solicitud, debes ponerte en contacto con la siguiente persona:\n\nNombre: ${data.nombres}\nApellidos: ${data.apellidos}\nCorreo electrónico: ${userEmail}\nCelular: ${data.celular}\n\n${data.comentarios}`;
+
+    // Envía los datos del formulario al correo electrónico proporcionado y a la copia
+    const response1 = await fetch("https://formspree.io/f/mzbwzekq", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...data,
+        _replyto: userEmail,
+        _cc: email2,
+        _subject: subject,
+        _message: message,
+      }), // Agrega el correo como "_cc", el asunto personalizado "_subject" y el mensaje personalizado "_message"
+    });
+
+    const response2 = await fetch(
       "http://localhost:8080/alquilervehiculos/api/contactanos",
       {
         method: "POST",
@@ -22,14 +45,24 @@ const Contactanos = () => {
         body: JSON.stringify(data),
       }
     );
-    
 
-    const result = await response.json();
-    console.log(result);
+    const result1 = await response1.json();
+    const result2 = await response2.json();
+
+    console.log(result1);
+    console.log(result2);
 
     setSent(true);
     event.target.reset();
-  }
+    setEmail("");
+  };
+
+  // Agrega el correo destinatario para la copia
+  useEffect(() => {
+    console.log(email);
+    setEmail2(email);
+    console.log("email 2: " + email2);
+  }, [email, email2]);
 
   return (
     <>
@@ -95,7 +128,7 @@ const Contactanos = () => {
           Si desea solicitar información, complete y envíe el formulario a
           continuación.
         </p>
-        <form className="needs-validation row g-3" onSubmit={handleSubmit}>
+        <form className="needs-validation row g-3" onSubmit={enviarCorreo}>
           <div className="col-md-6">
             <label className="form-label">Nombres</label>
             <input
@@ -123,6 +156,9 @@ const Contactanos = () => {
               className="form-control"
               placeholder="example@gmail.com"
               name="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
             />
           </div>
           <div className="col-md-4">

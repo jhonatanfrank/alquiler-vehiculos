@@ -55,11 +55,44 @@
   cursor: url('/public/images/prohibido.svg') 12 12, pointer !important;
 }
 
-.img-adicional{
+.img-adicional {
   width: 150px;
 }
 
-.contenedor-adicional{
+.contenedor-adicional {
   padding: 15px;
   margin-bottom: 15px;
 }
+
+.contenedor-descuento {
+  width: 100%;
+  max-width: 400px;
+  min-width: 300px;
+  background-color: #d6d6d6;
+  padding: 30px;
+  color: white;
+  border-radius: 5px;
+}
+
+.conteiner-precio-vehiculo {
+  background-color: #ff0000;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: bold;
+  width: auto;
+  height: auto;
+  font-size: 30px;
+  padding: 0px 7px;
+}
+
+.titulo-titulo-precio{
+  font-size: 20px;
+}
+
+.texto-input {
+  color: #6528e0;
+  font-weight: bold;
+  font-size: 25px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+

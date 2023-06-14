@@ -6,6 +6,7 @@ import "../styles/Vehiculos.css";
 
 const Vehiculos = () => {
   const [cuponesDescuentos, setCuponesDescuentos] = useState([]);
+  const [porcentajeDescuento, setPorcentajeDescuento] = useState(0);
 
   const [vehiculos, setVehiculos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -37,6 +38,7 @@ const Vehiculos = () => {
         const data = await response.json();
         setCuponesDescuentos(data);
         console.log(data); // Mostrar los datos en la consola
+        console.log(typeof data);
       } catch (error) {
         console.log(error);
       }
@@ -390,7 +392,7 @@ const Vehiculos = () => {
                                   (cupon) => cupon.vehiculo.id === vehiculo.id
                                 ) ? (
                                   <div className="container-cupon text-right">
-                                    DESCUENTO DEL {" "}
+                                    DESCUENTO DEL{" "}
                                     {cuponesDescuentos.find(
                                       (cupon) =>
                                         cupon.vehiculo.id === vehiculo.id
@@ -398,6 +400,7 @@ const Vehiculos = () => {
                                     % CON CUPÓN
                                   </div>
                                 ) : null}
+
                                 <div className="imagen-caja">
                                   <img
                                     className="foto-vehiculos"
