@@ -12,11 +12,10 @@ import Whatsappflotante from "./components/Whatsappflotante";
 import Vehiculo from "./pages/Vehiculo";
 import Error from "./components/Error";
 
-//export const userContext = React.createContext();
-
 function App() {
   return (
     <>
+    {/*Rutas para cada vista del PORTAL WEB */}
       <div className="App">
         <BrowserRouter>
           <Navbar />

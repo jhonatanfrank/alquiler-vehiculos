@@ -1,18 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import logo from '../images/logo-rent-cars.png';
 
 const Navbar = (props) => {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
         <div className="container-fluid">
-          {/*<Link className="nav-link" to="/">
+          <Link className="nav-link" to="/">
             <img
-              src="./images/logo-rent-cars.png"
+              src={logo}
               alt="logo-rent-cars"
-              className="img-navbar"          
+              className="img-navbar"
             />
-  </Link>*/}
+          </Link>
           <button
             className="navbar-toggler"
             type="button"

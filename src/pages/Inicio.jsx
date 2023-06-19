@@ -6,13 +6,12 @@ import Testimonios from "../components/Testimonios";
 const Inicio = () => {
 
   return (
-    <div>
+    <>
       <Carousel />
       <Quienessomos />
       <Calidadeficiencia />
       <Testimonios />
-
-    </div>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import Spinner from "../components/Spinner";
 import Vehiculodetails from "../components/Vehiculodetails";
 import Consejos from "../components/Consejos";
 import Alquileresfecha from "./Alquileresfecha";
+import { Link } from "react-router-dom";
 
 import { Modal, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -383,7 +384,7 @@ const Vehiculo = () => {
 
       formData.append("Nombres", nombres);
       formData.append("Apellidos", apellidos);
-      formData.append("DNI", dni);
+      formData.append("DNI o Carnet de extranjería", dni);
       formData.append("Correo electrónico", email);
       formData.append("País", pais);
       formData.append("Departamento", departamento);
@@ -413,8 +414,37 @@ const Vehiculo = () => {
       formData.append("Lugar recojo", lugarrecojo);
       formData.append("Lugar devolucion", lugardevolucion);
 
-      formData.append("Precio final", "$" + nuevopreciofinal);
-      formData.append("Codigo del descuento", codigoDescuento);
+      formData.append(
+        estadoCodigoDescuento === true
+          ? "Precio sin descuento"
+          : "Precio final",
+        estadoCodigoDescuento === true ? precioFinal : precioFinal
+      );
+      formData.append(
+        estadoCodigoDescuento === true
+          ? "Precio final"
+          : "Precio con descuento",
+        estadoCodigoDescuento === true
+          ? nuevopreciofinal
+          : "No se aplicó descuento"
+      );
+
+      formData.append(
+        estadoCodigoDescuento === true
+          ? "Porcentaje de descuento"
+          : "Porcentaje de descuento",
+        estadoCodigoDescuento === true
+          ? `${descuento * 100}%`
+          : "No se aplicó descuento"
+      );
+      formData.append(
+        estadoCodigoDescuento === true
+          ? "Codigo del descuento"
+          : "Codigo del descuento",
+        estadoCodigoDescuento === true
+          ? codigoDescuento
+          : "No se utilizó ningún cupón de descuento"
+      );
 
       enviarCorreo(formData);
       submitData();
@@ -531,9 +561,26 @@ const Vehiculo = () => {
 
     DATOS DE PAGO:
     Precio real: ${precioFinal}
-    Precio con descuento: ${nuevopreciofinal}
-    Porcentaje de descuento: ${descuento * 100}%
-    Codigo de descuento utilizado: ${codigoDescuento}
+    Precio con descuento: ${
+      estadoCodigoDescuento === true
+        ? nuevopreciofinal
+        : "No se aplicó descuento"
+    }    
+    ${
+      estadoCodigoDescuento === true
+        ? `Porcentaje de descuento: ${descuento * 100}%`
+        : "Porcentaje de descuento: No se aplicó descuento"
+    }
+    Codigo de descuento utilizado: ${
+      estadoCodigoDescuento === true
+        ? codigoDescuento
+        : "No se utilizó ningún cupón de descuento"
+    }
+    ${
+      estadoCodigoDescuento === true
+        ? `Precio final: ${nuevopreciofinal}`
+        : `Precio final: ${precioFinal}`
+    }
   `;
     doc.text(texto, 10, 10);
     doc.save("ALQUILER " + codigo + " " + nombres + " " + apellidos + ".pdf");
@@ -630,6 +677,8 @@ const Vehiculo = () => {
     }
   }, [inputValue, codigoDescuento, descuento, precioFinal]);
 
+  console.log(estadoCodigoDescuento);
+
   return (
     <>
       {vehiculo ? (
@@ -639,6 +688,18 @@ const Vehiculo = () => {
             <p>
               Puedes reservar el vehículo o alquilar aquí, siguiendo los pasos
             </p>
+          </div>
+
+          <div className="container">
+            <div className="row">
+              <div className="pt-5 d-flex justify-content-end">
+                <button className="btn btn-dark">
+                  <Link className="nav-link" to="/vehiculos">
+                    Volver a vehículos
+                  </Link>
+                </button>
+              </div>
+            </div>
           </div>
 
           <Vehiculodetails
@@ -877,10 +938,13 @@ const Vehiculo = () => {
                 <div className="contenedor-hijo-adicional">
                   <div className="container">
                     <h4>Complete los datos:</h4>
+                    <label className="mensaje-enviado">
+                      Campos obligatorios (*)
+                    </label>
                     <form id="miFormulario">
                       <div className="row">
                         <div className="col-md-3">
-                          <label>Nombres:</label>
+                          <label>Nombres (*)</label>
                           <input
                             id="nombres"
                             type="text"
@@ -893,7 +957,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Apellidos:</label>
+                          <label htmlFor="name">Apellidos (*)</label>
                           <input
                             type="text"
                             name="apellidos"
@@ -905,11 +969,13 @@ const Vehiculo = () => {
                           />
                         </div>{" "}
                         <div className="col-md-3">
-                          <label htmlFor="name">DNI:</label>
+                          <label htmlFor="name">
+                            DNI o Carnet de extranjería (*)
+                          </label>
                           <input
-                            type="text"
+                            type="number"
                             name="dni"
-                            className="form-control"
+                            className="form-control input-number"
                             value={dni}
                             placeholder="Ingrese su DNI"
                             onChange={obtenerDni}
@@ -917,7 +983,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Email:</label>
+                          <label htmlFor="name">Email (*)</label>
                           <input
                             type="text"
                             name="email"
@@ -929,7 +995,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-2">
-                          <label htmlFor="name">Pais:</label>
+                          <label htmlFor="name">Pais (*)</label>
                           <input
                             type="text"
                             name="pais"
@@ -941,7 +1007,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Departamento:</label>
+                          <label htmlFor="name">Departamento (*)</label>
                           <input
                             type="text"
                             name="departamento"
@@ -953,7 +1019,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Distrito:</label>
+                          <label htmlFor="name">Distrito *</label>
                           <input
                             type="text"
                             name="distrito"
@@ -965,7 +1031,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-4">
-                          <label htmlFor="name">Direccion:</label>
+                          <label htmlFor="name">Direccion (*)</label>
                           <input
                             type="text"
                             name="direccion"
@@ -977,11 +1043,11 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Telefono:</label>
+                          <label htmlFor="name">Telefono (*)</label>
                           <input
-                            type="text"
+                            type="number"
                             name="telefono"
-                            className="form-control"
+                            className="form-control input-number"
                             value={telefono1}
                             placeholder="Ingrese su telefono"
                             onChange={obtenerTelefono1}
@@ -989,11 +1055,11 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Telefono alternativo:</label>
+                          <label htmlFor="name">Telefono alternativo (*)</label>
                           <input
                             type="text"
                             name="telefonoalternativo"
-                            className="form-control"
+                            className="form-control input-number"
                             placeholder="Ingrese un número alternativo"
                             value={telefono2}
                             onChange={obtenerTelefono2}
@@ -1001,7 +1067,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Lugar recojo:</label>
+                          <label htmlFor="name">Lugar recojo (*)</label>
                           <input
                             type="text"
                             name="lugarrecojo"
@@ -1013,7 +1079,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-3">
-                          <label htmlFor="name">Lugar devolucion:</label>
+                          <label htmlFor="name">Lugar devolucion (*)</label>
                           <input
                             type="text"
                             name="lugardevolucion"
@@ -1025,7 +1091,7 @@ const Vehiculo = () => {
                           />
                         </div>
                         <div className="col-md-12">
-                          <label htmlFor="name">Comentario:</label>
+                          <label htmlFor="name">Comentario (*)</label>
                           <textarea
                             name="comentarios"
                             className="form-control"
@@ -1065,7 +1131,7 @@ const Vehiculo = () => {
                     </form>
 
                     <Modal
-                      size="xl"
+                      size="lg"
                       show={terminosycondiciones}
                       onHide={() => setTerminosycondiciones(false)}
                     >
@@ -1110,6 +1176,31 @@ const Vehiculo = () => {
                             arrendatario acepta cumplir con todas las
                             obligaciones y responsabilidades establecidas en
                             este contrato.
+                          </li>
+                          <li>
+                            El arrendatario se compromete a correr con todos los
+                            gastos relacionados con el uso y mantenimiento del
+                            vehículo durante el período de alquiler. Esto
+                            incluye, pero no se limita a, los gastos de
+                            combustible, peajes, estacionamiento, lavado del
+                            vehículo y cualquier otra tarifa o costo adicional
+                            que pueda surgir durante el uso del vehículo. El
+                            arrendatario asume la responsabilidad de pagar todos
+                            estos gastos de manera oportuna y de acuerdo con las
+                            políticas y condiciones establecidas en este
+                            contrato de alquiler.
+                          </li>
+                          <li>
+                            El arrendatario declara y garantiza que la persona
+                            que conducirá el vehículo durante el período de
+                            alquiler posee una licencia de conducir válida y
+                            vigente. El arrendatario se compromete a no permitir
+                            que ninguna persona sin licencia de conducir operé
+                            el vehículo alquilado. El incumplimiento de esta
+                            condición constituirá una violación de los términos
+                            y condiciones de este contrato, y el arrendatario
+                            asume toda la responsabilidad legal y financiera
+                            resultante de dicha violación.
                           </li>
                         </ol>
                       </Modal.Body>
@@ -1167,7 +1258,9 @@ const Vehiculo = () => {
                                               {apellidos}
                                             </div>
                                             <div className="col-md-4 col-sm-12">
-                                              <strong>DNI</strong>
+                                              <strong>
+                                                DNI o Carnet de extranjería
+                                              </strong>
                                             </div>
                                             <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
                                               {dni}
@@ -1222,13 +1315,17 @@ const Vehiculo = () => {
                                               <strong>Fecha inicio</strong>
                                             </div>
                                             <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                              {finicio}
+                                              {new Date(
+                                                finicio
+                                              ).toLocaleDateString()}
                                             </div>{" "}
                                             <div className="col-md-4 col-sm-12">
                                               <strong>Fecha fin</strong>
                                             </div>
                                             <div className="titulo-titulo col-md-8 col-sm-12 d-flex justify-content-end">
-                                              {ffin}
+                                              {new Date(
+                                                ffin
+                                              ).toLocaleDateString()}
                                             </div>{" "}
                                             <div className="col-md-4 col-sm-12">
                                               <strong>Días alquiler</strong>
