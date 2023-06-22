@@ -23,7 +23,7 @@ const Vehiculodetails = (props) => {
                 </div>
               </div>
               <h3>Detalles</h3>
-              <div className="row">    
+              <div className="row">
                 <div className="col-6 col-* d-flex justify-content-center align-items-center">
                   <li className="li-detalle">
                     <strong>Placa: </strong>
@@ -73,6 +73,14 @@ const Vehiculodetails = (props) => {
                     <strong>Tapizado: </strong>
                     <span className="titulo-titulo">
                       {props.tapizadoasientos}
+                    </span>
+                  </li>
+                </div>
+                <div className="col-6 d-flex justify-content-center align-items-center">
+                  <li className="li-detalle">
+                    <strong>Tipo de carro: </strong>
+                    <span className="titulo-titulo">
+                      {props.tipocarro}
                     </span>
                   </li>
                 </div>

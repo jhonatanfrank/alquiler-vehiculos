@@ -79,7 +79,7 @@ const Vehiculo = () => {
           "http://localhost:8080/alquilervehiculos/api/cuponesdescuentos/",
           {
             headers: {
-              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -133,7 +133,7 @@ const Vehiculo = () => {
           `http://localhost:8080/alquilervehiculos/api/alquileres/vehiculo/${placa}`,
           {
             headers: {
-              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -254,7 +254,7 @@ const Vehiculo = () => {
           `http://192.168.1.40:8080/alquilervehiculos/api/vehiculos/${params.id}`,
           {
             headers: {
-              Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -349,7 +349,7 @@ const Vehiculo = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(alquilerData),
       });
@@ -361,7 +361,7 @@ const Vehiculo = () => {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(vehiculoData),
       });
@@ -680,6 +680,7 @@ const Vehiculo = () => {
     }
   }, [inputValue, codigoDescuento, descuento, precioFinal]);
 
+
   return (
     <>
       {vehiculo ? (
@@ -705,17 +706,17 @@ const Vehiculo = () => {
 
           <Vehiculodetails
             placa={vehiculo.placa}
-            asientos={vehiculo.asientos}
             marca={vehiculo.marca.marca}
+            tipocombustible={vehiculo.tipocombustible.tipocombustible}
+            tipomanejo={vehiculo.tipomanejo.tipomanejo}
+            tipocarro={vehiculo.tipocarro.tipocarro}
+            tapizadoasientos={vehiculo.tapizadoasientos.tapizadoasientos}
+            asientos={vehiculo.asientos}
             modelo={vehiculo.modelo}
             anio={vehiculo.anio}
             precio={vehiculo.precio}
             foto={vehiculo.foto}
-            tipocombustible={vehiculo.tipocombustible.tipocombustible}
-            tipomanejo={vehiculo.tipomanejo.tipomanejo}
             descripcion={vehiculo.descripcion}
-            tapizadoasientos={vehiculo.tapizadoasientos.tapizadoasientos}
-            vehiculo={vehiculo}
           />
 
           {/*<Consejos />*/}

@@ -29,7 +29,7 @@ const Vehiculos = () => {
           "http://localhost:8080/alquilervehiculos/api/cuponesdescuentos",
           {
             headers: {
-              Authorization: "Basic " + btoa("admin:123"),
+              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"),
             },
           }
         );
@@ -60,7 +60,7 @@ const Vehiculos = () => {
           "http://192.168.1.40:8080/alquilervehiculos/api/vehiculos",
           {
             headers: {
-              Authorization: "Basic " + btoa("admin:123"),
+              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"),
             },
           }
         );

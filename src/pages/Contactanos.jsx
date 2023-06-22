@@ -40,7 +40,7 @@ const Contactanos = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa("admin:123"), // Reemplaza con las credenciales correctas
+          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
         },
         body: JSON.stringify(data),
       }
