@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Vehiculodetails from "../components/Vehiculodetails";
-import Consejos from "../components/Consejos";
-import Alquileresfecha from "./Alquileresfecha";
 import { Link } from "react-router-dom";
 
 import { Modal, Button } from "react-bootstrap";
@@ -13,7 +11,10 @@ import "../styles/Vehiculo.css";
 import { CLIENT_ID } from "../config/config.js";
 import Swal from "sweetalert2";
 
+/*INICIO PAYPAL*/
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+/*FIN PAYPAL*/
+
 /*INICIO CALENDARIO */
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
@@ -37,7 +38,6 @@ const Vehiculo = () => {
   const [ffin, setFfin] = useState("");
   const [estadofechas, setEstadofechas] = useState(false);
   const [estadoalquileres, setEstadoalquileres] = useState(false);
-  const [estadoactual, setEstadoactual] = useState(0);
   const [placa, setPlaca] = useState(true);
   const [idVehiculo, setIdVehiculo] = useState(0);
 
@@ -182,7 +182,6 @@ const Vehiculo = () => {
       </div>
     );
   }
-
   /*CALENDARIO FIN*/
 
   /* PAYPAL INICIO */
@@ -213,12 +212,7 @@ const Vehiculo = () => {
   const [vehiculo, setVehiculo] = useState(null);
   const [precioFinal, setPrecioFinal] = useState(0);
   const [precioVehiculo, setPrecioVehiculo] = useState(0);
-  const [fecha1, setFecha1] = useState("");
-  const [fecha2, setFecha2] = useState("");
-  const [diferencia, setDiferencia] = useState(0);
   const [codigo, setCodigo] = useState("");
-  const [codigoNuevo, setCodigoNuevo] = useState("");
-  const [alquiler, setAlquiler] = useState({});
   const [cargando, setCargando] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [mostrarEnlace, setMostrarEnlace] = useState(false);
@@ -379,6 +373,8 @@ const Vehiculo = () => {
     };
 
     if (success) {
+      const fechaInicio = finicio.split("T")[0];
+      const fechaFin = ffin.split("T")[0];
       const formData = new FormData();
       formData.append("Codigo del Alquiler", codigo);
 
@@ -407,8 +403,8 @@ const Vehiculo = () => {
       );
       formData.append("Tipo de manejo", vehiculo.tipomanejo.tipomanejo);
 
-      formData.append("Fecha inicio", finicio);
-      formData.append("Fecha fin", ffin);
+      formData.append("Fecha inicio", fechaInicio);
+      formData.append("Fecha fin", fechaFin);
       formData.append("Días de alquiler", diferencia1);
 
       formData.append("Lugar recojo", lugarrecojo);
@@ -528,6 +524,9 @@ const Vehiculo = () => {
 
   const exportarPDF = () => {
     const doc = new jsPDF();
+    const fechaInicio = finicio.split("T")[0];
+    const fechaFin = ffin.split("T")[0];
+
     const texto = `
     CÓDIGO DEL ALQUILER: ${codigo}
 
@@ -551,8 +550,8 @@ const Vehiculo = () => {
     Tipo de manejo: ${vehiculo.tipomanejo.tipomanejo}
 
     FECHAS DEL ALQUILER:
-    Fecha inicio: ${finicio}
-    Fecha fin: ${ffin}
+    Fecha inicio: ${fechaInicio}
+    Fecha fin: ${fechaFin}
     Dias de alquiler: ${diferencia1}
 
     LUGAR DE ROCOJO Y DEVOLUCION:
@@ -648,6 +647,7 @@ const Vehiculo = () => {
   }, [success]);
 
   /* PAYPAL FIN*/
+
   const handleFormulario = () => {
     setMostrarFormulario(true);
     setMostrarEnlace(false);
@@ -657,10 +657,12 @@ const Vehiculo = () => {
     setMostrarFormulario(false);
     setMostrarEnlace(true);
   };
+
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
   };
 
+  /*Para cambiar el estado si es que hay caracteres en el input del codigo del descuenteo*/
   useEffect(() => {
     if (inputValue === codigoDescuento) {
       setEstadoCodigoDescuento(true);
@@ -669,6 +671,7 @@ const Vehiculo = () => {
     }
   }, [inputValue, codigoDescuento, setEstadoCodigoDescuento]);
 
+  /*Para hallar el precio finak depende del descuento*/
   useEffect(() => {
     if (inputValue === codigoDescuento) {
       setNuevopreciofinal(precioFinal - descuento * precioFinal);
@@ -676,8 +679,6 @@ const Vehiculo = () => {
       setNuevopreciofinal(precioFinal);
     }
   }, [inputValue, codigoDescuento, descuento, precioFinal]);
-
-  console.log(estadoCodigoDescuento);
 
   return (
     <>

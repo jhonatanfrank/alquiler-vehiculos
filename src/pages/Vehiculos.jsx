@@ -6,8 +6,6 @@ import "../styles/Vehiculos.css";
 
 const Vehiculos = () => {
   const [cuponesDescuentos, setCuponesDescuentos] = useState([]);
-  const [porcentajeDescuento, setPorcentajeDescuento] = useState(0);
-
   const [vehiculos, setVehiculos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [filtroMarca, setFiltroMarca] = useState("");
@@ -153,11 +151,13 @@ const Vehiculos = () => {
           <>
             <div className="container">
               <div className="row">
+                {/*Contenedor de filtros */}
                 <div className="col-xxl-3 col-xl-3 col-lg-12 col-md-12 col-sm-12 mt-5 mb-5">
                   <h4 className="titulo-titulo">Filtros:</h4>
                   <table className="table table-bordered">
                     <tbody>
                       <tr>
+                        {/*Filtrar por Marca*/}
                         <td>
                           <div>
                             <h5>
@@ -199,6 +199,7 @@ const Vehiculos = () => {
                         </td>
                       </tr>
                       <tr>
+                        {/*Filtrar por Tipo de Combustible*/}
                         <td>
                           <div>
                             <div>
@@ -283,6 +284,7 @@ const Vehiculos = () => {
                         </td>
                       </tr>
                       <tr>
+                        {/*Filtrar por Precio*/}
                         <td>
                           <div>
                             <h5>
@@ -314,6 +316,7 @@ const Vehiculos = () => {
                         </td>
                       </tr>
                       <tr>
+                        {/*Filtrar por Tipo de Manejo*/}
                         <td>
                           <div>
                             <h5>
@@ -368,6 +371,7 @@ const Vehiculos = () => {
                         </td>
                       </tr>
                       <tr>
+                        {/*Contador de vehiculos disponibles segun el filtro*/}
                         <td>
                           <div>
                             <h5>
@@ -380,14 +384,19 @@ const Vehiculos = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {/*Contenedor de todos los vehiculos*/}
                 <div className="col-xxl-9 col-xl-9 col-lg-12 col-md-12 col-sm-12">
                   <div className="contenedor-padre-vehiculos">
+                    {/*Mostrar todos los vehiculos segun el filtro*/}
                     {filteredVehiculos.length > 0 ? (
                       <>
+                        {/*Mostrar todos los vehiculos*/}
                         {filteredVehiculos.map((vehiculo, index) => (
                           <div key={index}>
                             <>
                               <div className="contenedor-hijo-vehiculos contenedor-box-shadow">
+                                {/*Traer el conteiner de descuento*/}
                                 {cuponesDescuentos.some(
                                   (cupon) => cupon.vehiculo.id === vehiculo.id
                                 ) ? (
@@ -401,6 +410,7 @@ const Vehiculos = () => {
                                   </div>
                                 ) : null}
 
+                                {/*Mostrar atributos del vehiculo*/}
                                 <div className="imagen-caja">
                                   <img
                                     className="foto-vehiculos"
@@ -423,7 +433,6 @@ const Vehiculos = () => {
                                 <h3 className="text-center">
                                   <strong>{vehiculo.placa}</strong>
                                 </h3>
-
                                 <div className="boton-mas-detalles">
                                   <Link to={`/vehiculos/${vehiculo.id}`}>
                                     <button className="btn btn-dark col-12 btn-sm p-2">
