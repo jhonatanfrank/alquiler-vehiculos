@@ -1,68 +1,81 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles/Contactanos.css";
-import { set } from "date-fns";
 
 const Contactanos = () => {
+  const [nombres, setNombres] = useState("");
+  const [apellidos, setApellidos] = useState("");
   const [email, setEmail] = useState("");
-  const [email2, setEmail2] = useState("");
+  const [celular, setCelular] = useState("");
+  const [comentarios, setComentarios] = useState("");
   const [sent, setSent] = useState(false);
+
+  const handleNombres = (event) => {
+    setNombres(event.target.value);
+  };
+
+  const handleApellidos = (event) => {
+    setApellidos(event.target.value);
+  };
+
+  const handleEmail = (event) => {
+    setEmail(event.target.value);
+  };
+
+  const handleCelular = (event) => {
+    setCelular(event.target.value);
+  };
+
+  const handleComentarios = (event) => {
+    setComentarios(event.target.value);
+  };
 
   const enviarCorreo = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
-
-    const userEmail = data.email; // Obtiene el correo electrónico ingresado por el usuario
-
-    const subject = "¡Nuevo formulario de contacto recibido!";
-    const message = `Tienes una nueva solicitud, debes ponerte en contacto con la siguiente persona:\n\nNombre: ${data.nombres}\nApellidos: ${data.apellidos}\nCorreo electrónico: ${userEmail}\nCelular: ${data.celular}\n\n${data.comentarios}`;
-
-    // Envía los datos del formulario al correo electrónico proporcionado y a la copia
-    const response1 = await fetch("https://formspree.io/f/mzbwzekq", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const alquilerData = {
+      nombres: nombres,
+      apellidos: apellidos,
+      email: email,
+      celular: celular,
+      comentarios: comentarios,
+      estadoatencion: {
+        id: 1,
       },
-      body: JSON.stringify({
-        ...data,
-        _replyto: userEmail,
-        _cc: email2,
-        _subject: subject,
-        _message: message,
-      }), // Agrega el correo como "_cc", el asunto personalizado "_subject" y el mensaje personalizado "_message"
-    });
+    };
 
-    const response2 = await fetch(
+    const response = await fetch(
       "http://localhost:8080/alquilervehiculos/api/contactanos",
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
+          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"),
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(alquilerData),
       }
     );
 
-    const result1 = await response1.json();
-    const result2 = await response2.json();
+    const result = await response.json();
+    console.log(result);
 
-    console.log(result1);
-    console.log(result2);
+    const response1 = await fetch("https://formspree.io/f/mnqkaqyd", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...alquilerData,
+        _replyto: email,
+      }),
+    });
 
     setSent(true);
-    event.target.reset();
+    setNombres("");
+    setApellidos("");
     setEmail("");
+    setCelular("");
+    setComentarios("");
   };
-
-  // Agrega el correo destinatario para la copia
-  useEffect(() => {
-    console.log(email);
-    setEmail2(email);
-    console.log("email 2: " + email2);
-  }, [email, email2]);
 
   return (
     <>
@@ -136,6 +149,8 @@ const Contactanos = () => {
               className="form-control"
               placeholder="Nombres"
               name="nombres"
+              value={nombres}
+              onChange={handleNombres}
               required
             />
           </div>
@@ -146,18 +161,20 @@ const Contactanos = () => {
               className="form-control"
               placeholder="Apellidos"
               name="apellidos"
+              value={apellidos}
+              onChange={handleApellidos}
               required
             />
           </div>
           <div className="col-md-8">
-            <label className="form-label">Correo electronico</label>
+            <label className="form-label">Correo electrónico</label>
             <input
               type="email"
               className="form-control"
               placeholder="example@gmail.com"
               name="email"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={handleEmail}
               required
             />
           </div>
@@ -168,15 +185,19 @@ const Contactanos = () => {
               className="form-control"
               placeholder="+51 976 407 806"
               name="celular"
+              value={celular}
+              onChange={handleCelular}
               required
             />
           </div>
           <div className="col-md-12">
-            <label className="form-label">Añade algo mas a tu solicitud:</label>
+            <label className="form-label">Añade algo más a tu solicitud:</label>
             <textarea
               name="comentarios"
               className="form-control"
               rows="6"
+              value={comentarios}
+              onChange={handleComentarios}
               required
             ></textarea>
           </div>
@@ -187,7 +208,7 @@ const Contactanos = () => {
           </div>
         </form>
         {sent ? (
-          <div className="mensaje-enviado">¡Fomulario enviado con éxito!</div>
+          <div className="mensaje-enviado">¡Formulario enviado con éxito!</div>
         ) : null}
       </div>
       <br />

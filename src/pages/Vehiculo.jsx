@@ -79,7 +79,8 @@ const Vehiculo = () => {
           "http://localhost:8080/alquilervehiculos/api/cuponesdescuentos/",
           {
             headers: {
-              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
+              Authorization:
+                "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -133,7 +134,8 @@ const Vehiculo = () => {
           `http://localhost:8080/alquilervehiculos/api/alquileres/vehiculo/${placa}`,
           {
             headers: {
-              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
+              Authorization:
+                "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -254,7 +256,8 @@ const Vehiculo = () => {
           `http://192.168.1.40:8080/alquilervehiculos/api/vehiculos/${params.id}`,
           {
             headers: {
-              Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
+              Authorization:
+                "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
             },
           }
         );
@@ -289,7 +292,7 @@ const Vehiculo = () => {
       const subject = "¡Tu alquiler con RENT CARS!";
 
       // Envía los datos del formulario al correo electrónico proporcionado y a la copia
-      fetch("https://formspree.io/f/mzbwzekq", {
+      fetch("https://formspree.io/f/mnqkaqyd", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -314,11 +317,14 @@ const Vehiculo = () => {
       const alquilerUrl =
         "http://localhost:8080/alquilervehiculos/api/alquileres";
       const vehiculoUrl = `http://localhost:8080/alquilervehiculos/api/vehiculos/${vehiculo.id}`;
+      /*const estadoAtencionUrl =
+        "http://localhost:8080/alquilervehiculos/api/estadoatencion/1";*/
 
       const fecha1_c = new Date(finicio);
       const fecha2_c = new Date(ffin);
 
       const alquilerData = {
+        codigoalquiler: codigo,
         nombres: nombres,
         apellidos: apellidos,
         dni: dni,
@@ -338,6 +344,9 @@ const Vehiculo = () => {
         diasalquiler: diferencia1,
         vehiculo: {
           id: vehiculo.id,
+        },
+        estadoatencion: {
+          id: 1,
         },
       };
 
@@ -368,6 +377,20 @@ const Vehiculo = () => {
 
       const vehiculoResponseData = await vehiculoResponse.json();
       console.log(vehiculoResponseData);
+
+      /*
+      const estadoAtencionResponse = await fetch(estadoAtencionUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic " + btoa("administrador@rentcars.pe:@Frank123"), // Reemplaza con las credenciales correctas
+        },
+        body: JSON.stringify({ id: 1 }),
+      });
+
+      const estadoAtencionResponseData = await estadoAtencionResponse.json();
+      console.log(estadoAtencionResponseData);
+      */
 
       setReservaExitosa(true);
     };
@@ -679,7 +702,6 @@ const Vehiculo = () => {
       setNuevopreciofinal(precioFinal);
     }
   }, [inputValue, codigoDescuento, descuento, precioFinal]);
-
 
   return (
     <>
